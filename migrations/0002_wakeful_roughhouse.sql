@@ -1,1 +1,0 @@
-ALTER TABLE "users" RENAME COLUMN "full_namee" TO "full_name";
