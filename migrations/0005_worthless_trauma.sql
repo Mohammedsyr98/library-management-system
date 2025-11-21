@@ -1,0 +1,2 @@
+CREATE POLICY "users_can_read_own_data" ON "users" AS RESTRICTIVE FOR SELECT TO public USING (id = auth.uid() AND status = 'APPROVED');--> statement-breakpoint
+CREATE POLICY "admins_can_read_all_users" ON "users" AS RESTRICTIVE FOR SELECT TO "authenticated" USING (role = 'ADMIN');
