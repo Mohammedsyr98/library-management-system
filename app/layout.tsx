@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
+import bgImage from "@/public/images/background.png";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
+import { Toaster } from "react-hot-toast";
+import { ToastHandler } from "@/components/ToastHandler";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,12 +27,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <ReactQueryClientProvider>
+      {" "}
+      <html lang="en">
+        <body
+          style={{
+            backgroundImage: `url(${bgImage.src})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <Toaster position="bottom-right" />
+          <ToastHandler />
+          {children}
+        </body>
+      </html>
+    </ReactQueryClientProvider>
   );
 }
