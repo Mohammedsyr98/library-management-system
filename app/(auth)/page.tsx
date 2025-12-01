@@ -17,7 +17,6 @@ const AuthLayout = () => {
 
   return (
     <section className={`flex flex-col md:flex-row `}>
-      {/* Form section */}
       <div className="flex-1 flex items-center justify-center">
         <AnimatePresence mode="wait" initial={false}>
           {formStep === "login" ? (
@@ -27,8 +26,7 @@ const AuthLayout = () => {
               initial="initial"
               animate="animate"
               exit="exit"
-              transition={{ duration: 0.4 }}
-            >
+              transition={{ duration: 0.4 }}>
               <SignInForm setFormStep={setFormStep} />
             </motion.div>
           ) : (
@@ -38,20 +36,19 @@ const AuthLayout = () => {
               initial="initial"
               animate="animate"
               exit="exit"
-              transition={{ duration: 0.4 }}
-            >
+              transition={{ duration: 0.4 }}>
               <SignUpForm setFormStep={setFormStep} />
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* Image section */}
-      <div className="hidden md:block flex-1">
+      <div className="hidden md:block flex-1 sticky top-0 h-screen">
         <Image
-          className={` w-full object-cover`}
+          className={` w-full max-h-screen object-cover`}
           src={libraryImg}
           alt="library-image"
+          priority
         />
       </div>
     </section>
