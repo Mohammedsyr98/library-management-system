@@ -40,11 +40,11 @@ const SignInForm = ({
         } else {
           showToast(
             `Welcome ${userRow.data?.full_name}, you have logged in successfully!`,
-            "success"
+            "success",
           );
 
           router.push(
-            userRow.data?.role === "ADMIN" ? "/dashboard/home" : "/home-page"
+            userRow.data?.role === "ADMIN" ? "/dashboard/home" : "/home-page",
           );
         }
       },
@@ -101,7 +101,8 @@ const SignInForm = ({
             Don’t have an account already?
             <button
               onClick={() => setFormStep("sign-up")}
-              className="text-[#E7C9A5] hover:underline">
+              className="text-[#E7C9A5] hover:underline"
+            >
               Register here
             </button>
           </p>

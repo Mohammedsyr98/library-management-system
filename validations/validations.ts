@@ -10,7 +10,7 @@ export const signUpSchema = yup
         (value) => {
           if (!value) return false;
           return value.trim().split(" ").length >= 2;
-        }
+        },
       ),
     email: yup.string().email("Invalid email").required("Email is required"),
     university_id: yup.number().required("University ID is required"),

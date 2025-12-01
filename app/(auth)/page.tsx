@@ -27,7 +27,8 @@ const AuthLayout = () => {
               initial="initial"
               animate="animate"
               exit="exit"
-              transition={{ duration: 0.4 }}>
+              transition={{ duration: 0.4 }}
+            >
               <SignInForm setFormStep={setFormStep} />
             </motion.div>
           ) : (
@@ -37,7 +38,8 @@ const AuthLayout = () => {
               initial="initial"
               animate="animate"
               exit="exit"
-              transition={{ duration: 0.4 }}>
+              transition={{ duration: 0.4 }}
+            >
               <SignUpForm setFormStep={setFormStep} />
             </motion.div>
           )}

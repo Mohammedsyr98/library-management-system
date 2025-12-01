@@ -54,7 +54,8 @@ function FormInput<T extends FieldValues>({
         <button
           type="button"
           onClick={() => setShowPassword((prev) => !prev)}
-          className="absolute right-3 top-[50px] text-gray-500">
+          className="absolute right-3 top-[50px] text-gray-500"
+        >
           {showPassword ? (
             <AiOutlineEyeInvisible size={20} />
           ) : (

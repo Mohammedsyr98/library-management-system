@@ -36,7 +36,8 @@ export default function RootLayout({
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
           <Toaster position="bottom-right" />
           <ToastHandler />
           {children}

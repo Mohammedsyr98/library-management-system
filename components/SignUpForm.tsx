@@ -29,7 +29,7 @@ const SignUpForm = ({
       onSuccess: () => {
         showToast(
           "Account created successfully. Please wait for admin approval to activate your account.",
-          "success"
+          "success",
         );
 
         // redirect or do something
@@ -104,7 +104,8 @@ const SignUpForm = ({
             Have an account already?
             <button
               onClick={() => setFormStep("login")}
-              className="text-[#E7C9A5] hover:underline">
+              className="text-[#E7C9A5] hover:underline"
+            >
               Login
             </button>
           </p>

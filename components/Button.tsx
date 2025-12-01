@@ -30,7 +30,8 @@ export const Button = ({
                transition-colors
               ${
                 isPending ? "cursor-not-allowed opacity-70" : "cursor-pointer"
-              }`}>
+              }`}
+    >
       {isPending ? (
         <Oval
           height={20}
