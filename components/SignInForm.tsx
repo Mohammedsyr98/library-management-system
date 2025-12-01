@@ -40,11 +40,11 @@ const SignInForm = ({
         } else {
           showToast(
             `Welcome ${userRow.data?.full_name}, you have logged in successfully!`,
-            "success",
+            "success"
           );
 
           router.push(
-            userRow.data?.role === "ADMIN" ? "/dashboard/home" : "/home-page",
+            userRow.data?.role === "ADMIN" ? "/dashboard/home" : "/home-page"
           );
         }
       },
@@ -55,7 +55,7 @@ const SignInForm = ({
   };
   return (
     <>
-      <main className="bg-[#12141D] m-20 rounded-[20px] shadow-[0_4px_6px_rgba(0,0,0,0.2)]">
+      <main className="bg-[#12141D] rounded-[20px] shadow-[0_4px_6px_rgba(0,0,0,0.2)]">
         <div className="p-10 text-white ">
           <Image src={logo} alt="BookWise logo" width={150} height={50} />
 
@@ -101,8 +101,7 @@ const SignInForm = ({
             Don’t have an account already?
             <button
               onClick={() => setFormStep("sign-up")}
-              className="text-[#E7C9A5] hover:underline"
-            >
+              className="text-[#E7C9A5] hover:underline">
               Register here
             </button>
           </p>

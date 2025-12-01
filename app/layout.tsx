@@ -31,13 +31,7 @@ export default function RootLayout({
       {" "}
       <html lang="en">
         <body
-          style={{
-            backgroundImage: `url(${bgImage.src})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <Toaster position="bottom-right" />
           <ToastHandler />
           {children}
