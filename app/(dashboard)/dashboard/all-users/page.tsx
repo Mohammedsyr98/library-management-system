@@ -1,7 +1,11 @@
-import React from "react";
+import PageHead from "@/components/dashboard/PageHead";
 
 const AllUsers = () => {
-  return <div>AllUsers</div>;
+  return (
+    <div>
+      <PageHead />
+    </div>
+  );
 };
 
 export default AllUsers;
