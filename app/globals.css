@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-body {
+.background {
   background-color: #05070e;
   background-image: url(".././public/images/background.png");
   background-size: cover;
@@ -12,6 +12,8 @@ body {
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-brand1: #25388c;
+  --color-brand2: #f8f8ff;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);

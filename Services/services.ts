@@ -34,11 +34,16 @@ export const signUp = async (data: SignUpFormData) => {
   return userData as IResponse;
 };
 
-export const getCurrentUserStatus = async () => {
+export const getCurrentUser = async () => {
   const { data: userData, error } = await supabase.rpc("get_current_user");
 
   if (error) throw { message: error.message } as IErrorResponse;
 
   if (error) throw error;
   return userData as IResponse;
+};
+export const signOut = async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) throw new Error(error.message);
+  return { message: "Signed out successfully" };
 };

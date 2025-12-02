@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 const layout = ({ children }: { children: ReactNode }) => {
   return (
-    <div>
+    <div className="background">
       <div>nav</div>
       {children}
     </div>

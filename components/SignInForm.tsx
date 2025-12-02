@@ -7,8 +7,8 @@ import { signInSchema } from "@/validations/validations";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSignIn } from "@/hooks/useAuth";
 import { supabase } from "@/lib/supabaseClient";
-import { getCurrentUserStatus } from "@/Services/services";
-import { Button } from "./Button";
+import { getCurrentUser } from "@/Services/services";
+import { Button } from "./ui/Button";
 import { useRouter } from "next/navigation";
 import { useToast } from "../hooks/useToast";
 
@@ -32,7 +32,7 @@ const SignInForm = ({
   const onSubmit = async (data: SignInFormData) => {
     signIn(data, {
       onSuccess: async () => {
-        const userRow = await getCurrentUserStatus();
+        const userRow = await getCurrentUser();
 
         if (userRow.error) {
           showToast(userRow.error, "error");
