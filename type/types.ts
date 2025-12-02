@@ -34,4 +34,7 @@ declare global {
   interface IErrorResponse {
     message: string;
   }
+  interface ISignOutResponse {
+    message: string;
+  }
 }

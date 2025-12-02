@@ -5,7 +5,7 @@ import FormInput from "./form-components/FormInput";
 import { signUpSchema } from "@/validations/validations";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSignUp } from "@/hooks/useAuth";
-import { Button } from "./Button";
+import { Button } from "./ui/Button";
 import { useToast } from "../hooks/useToast";
 
 const SignUpForm = ({
@@ -29,7 +29,7 @@ const SignUpForm = ({
       onSuccess: () => {
         showToast(
           "Account created successfully. Please wait for admin approval to activate your account.",
-          "success",
+          "success"
         );
 
         // redirect or do something
@@ -104,8 +104,7 @@ const SignUpForm = ({
             Have an account already?
             <button
               onClick={() => setFormStep("login")}
-              className="text-[#E7C9A5] hover:underline"
-            >
+              className="text-[#E7C9A5] hover:underline">
               Login
             </button>
           </p>

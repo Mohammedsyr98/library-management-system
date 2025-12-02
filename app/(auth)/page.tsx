@@ -16,7 +16,7 @@ const AuthLayout = () => {
   const [formStep, setFormStep] = useState("login");
 
   return (
-    <section className={`flex flex-col md:flex-row `}>
+    <section className={`flex flex-col md:flex-row background`}>
       <div className="flex-1 flex items-center justify-center">
         <AnimatePresence mode="wait" initial={false}>
           {formStep === "login" ? (
