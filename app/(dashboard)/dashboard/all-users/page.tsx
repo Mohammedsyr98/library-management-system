@@ -1,9 +1,13 @@
 import PageHead from "@/components/dashboard/PageHead";
+import { Suspense } from "react";
 
 const AllUsers = () => {
   return (
     <div>
-      <PageHead />
+      <Suspense fallback={<div></div>}>
+        {" "}
+        <PageHead />
+      </Suspense>
     </div>
   );
 };
