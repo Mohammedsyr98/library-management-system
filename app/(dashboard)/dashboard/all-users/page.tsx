@@ -1,5 +1,6 @@
 import PageHead from "@/components/dashboard/PageHead";
 import UsersDataTable from "@/components/dashboard/users/UsersDataTable";
+import { Suspense } from "react";
 
 const AllUsers = () => {
   const data: IUsers[] = [
@@ -46,7 +47,9 @@ const AllUsers = () => {
 
   return (
     <div>
-      <PageHead />
+      <Suspense fallback={<div></div>}>
+        <PageHead />
+      </Suspense>
       <div className="bg-white mx-6 p-5 rounded-[14px] mt-10">
         <p className="text-[20px] font-semibold text-[#1E293B] mb-[23px]">
           All Users
