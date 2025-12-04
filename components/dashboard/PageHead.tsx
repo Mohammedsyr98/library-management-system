@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-
 import searchIcon from "@/public/images/searchIcon.png";
 import { useGetCurrentUser } from "@/hooks/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -27,7 +26,7 @@ const PageHead = () => {
     router.replace(`?${newQuery}`);
   };
   return (
-    <div className="p-4 flex items-center justify-between">
+    <div className="p-5 flex items-center justify-between">
       <div>
         <p className="text-2xl font-semibold">Welcome, {firstName}</p>
         <p className="text-[#8D8D8D]">
