@@ -18,7 +18,7 @@ export type Database = {
         Row: {
           created_at: string | null;
           email: string;
-          full_name: string | null;
+          full_name: string;
           id: string;
           last_activity_date: string | null;
           role: Database["public"]["Enums"]["role"] | null;

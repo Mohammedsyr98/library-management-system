@@ -7,7 +7,25 @@ const UsersDataTable = ({ data }: { data: IUsers[] }) => {
   const columns: ColumnDef<IUsers>[] = [
     {
       accessorKey: "full_name",
-      cell: (info) => info.getValue(),
+      cell: ({ row }) => (
+        <div className="flex items-center gap-x-2">
+          {" "}
+          <div className="border rounded-[7px] w-[34px] text-center p-1 font-semibold text-green-600">
+            {row.original.full_name
+              .split(" ")
+              .map((n) => n[0])
+              .slice(0, 2)
+              .join("")
+              .toUpperCase()}
+          </div>
+          <div>
+            <p className="text-brand3 text-[14px] font-semibold">
+              {row.original.full_name}
+            </p>
+            <p className="text-brand4"> {row.original.email}</p>
+          </div>
+        </div>
+      ),
       header: () => <span>Name</span>,
     },
     {
