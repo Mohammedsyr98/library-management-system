@@ -1,9 +1,11 @@
 import PageHead from "@/components/dashboard/PageHead";
 import UsersDataTable from "@/components/dashboard/users/UsersDataTable";
-import { supabase } from "@/lib/supabaseServer";
+import { createClient } from "@/utils/supabase/supabase-server";
 import { Suspense } from "react";
 
 const AllUsers = async () => {
+  const supabase = await createClient();
+
   const { data: users } = await supabase.from("users").select("*");
 
   return (
