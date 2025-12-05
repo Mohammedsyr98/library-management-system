@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 
-# Run Prettier
-npm run format
+
 
 # Run TypeScript check
 npm run check || exit 1

@@ -38,13 +38,5 @@ declare global {
     message: string;
   }
 
-  type IUsers = {
-    id: string;
-    fullName: string;
-    email: string;
-    created_at: string;
-    role: "ADMIN" | "USER";
-    books_borrowed: any[];
-    university_id: number;
-  };
+  type IUsers = Database["public"]["Tables"]["users"]["Row"];
 }
