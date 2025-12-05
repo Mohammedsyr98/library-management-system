@@ -5,8 +5,15 @@ import { createClient } from "./utils/supabase/supabase-server";
 export async function proxy(request: NextRequest) {
   const supabase = await createClient();
   const pathname = request.nextUrl.pathname;
+  const { data: userData } = await supabase.auth.getUser();
 
-  const { data } = await supabase.from("users").select("role").single();
+  const { data } = userData.user
+    ? await supabase
+        .from("users")
+        .select("role")
+        .eq("id", userData.user.id)
+        .single()
+    : { data: null };
   const role = data?.role ?? null;
 
   // Public routes (can be accessed by anyone)

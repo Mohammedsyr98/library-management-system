@@ -23,6 +23,7 @@ export type Database = {
           last_activity_date: string | null;
           role: Database["public"]["Enums"]["role"] | null;
           status: Database["public"]["Enums"]["status"] | null;
+          Borrowed_books: number;
           university_id: number | null;
         };
         Insert: {
