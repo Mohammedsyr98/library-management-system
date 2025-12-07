@@ -53,7 +53,14 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      get_current_user: { Args: never; Returns: Json };
+      get_current_user: {
+        Args: never;
+        Returns: {
+          data?: Database["public"]["Tables"]["users"]["Row"];
+          error?: string;
+          status?: string;
+        };
+      };
     };
     Enums: {
       borrow_status: "BORROWED" | "RETURNED";

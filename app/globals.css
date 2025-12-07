@@ -132,6 +132,9 @@
     @apply bg-background text-foreground;
   }
 }
+button {
+  cursor: pointer;
+}
 table {
   width: 100%;
   border-collapse: separate;

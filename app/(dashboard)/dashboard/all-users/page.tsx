@@ -3,10 +3,22 @@ import UsersDataTable from "@/components/dashboard/users/UsersDataTable";
 import { createClient } from "@/utils/supabase/supabase-server";
 import { Suspense } from "react";
 
-const AllUsers = async () => {
+const AllUsers = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) => {
+  const { search = "" } = await searchParams;
+
   const supabase = await createClient();
 
-  const { data: users } = await supabase.from("users").select("*");
+  const { data: users } = await supabase
+    .from("users")
+    .select("*", { count: "estimated" })
+    .or(`full_name.ilike.%${search}%,email.ilike.%${search}%`)
+    .order("created_at", { ascending: false })
+    .range(2, 3);
+  const { data: currentUser } = await supabase.rpc("get_current_user");
 
   return (
     <div>
@@ -17,7 +29,10 @@ const AllUsers = async () => {
         <p className="text-[20px] font-semibold text-[#1E293B] mb-[23px]">
           All Users
         </p>
-        <UsersDataTable data={users ?? []} />
+        <UsersDataTable
+          data={users ?? []}
+          currentUserId={currentUser?.data?.id ?? ""}
+        />
       </div>
     </div>
   );

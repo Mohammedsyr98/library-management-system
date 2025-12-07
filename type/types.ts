@@ -15,17 +15,8 @@ declare global {
     password: string;
   }
   type TypedSupabaseClient = SupabaseClient<Database>;
+  type IUser = Database["public"]["Tables"]["users"]["Row"];
 
-  interface IUser {
-    created_at: Date;
-    email: string;
-    full_name: string;
-    id: string;
-    last_activity_date: string;
-    role: "USER" | "ADMIN";
-    status: "APPROVED" | "PENDING" | "REJECTED";
-    university_id: number;
-  }
   interface IResponse {
     data?: IUser;
     error?: string;
@@ -38,5 +29,8 @@ declare global {
     message: string;
   }
 
-  type IUsers = Database["public"]["Tables"]["users"]["Row"];
+  interface UpdateUserRolePayload {
+    userId: string;
+    newRole: Database["public"]["Enums"]["role"];
+  }
 }
