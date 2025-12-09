@@ -28,9 +28,15 @@ import { Oval } from "react-loader-spinner";
 const UsersDataTable = ({
   data,
   currentUserId,
+  total,
+  page,
+  limit,
 }: {
   data: Database["public"]["Tables"]["users"]["Row"][];
   currentUserId: string;
+  total: number;
+  page: number;
+  limit: number;
 }) => {
   const [dialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
@@ -48,7 +54,7 @@ const UsersDataTable = ({
     updateUserRole(
       { newRole, userId },
       {
-        onSuccess: (data) => {
+        onSuccess: () => {
           showToast("User role updated successfully.", "success");
           setIsDialogOpen(false);
           router.refresh();
@@ -69,7 +75,6 @@ const UsersDataTable = ({
       { userId },
       {
         onSuccess: (data) => {
-          console.log(data);
           showToast("User deleted successfully.", "success");
           router.refresh();
         },
@@ -83,8 +88,9 @@ const UsersDataTable = ({
   const columns: ColumnDef<IUser>[] = [
     {
       accessorKey: "full_name",
+
       cell: ({ row }) => (
-        <div className="flex items-center gap-x-2">
+        <div className="flex items-center gap-x-2 min-w-0">
           {" "}
           <div className="border rounded-[7px] w-[34px] text-center p-1 font-semibold text-green-600">
             {row.original.full_name
@@ -94,11 +100,11 @@ const UsersDataTable = ({
               .join("")
               .toUpperCase()}
           </div>
-          <div>
-            <p className="text-brand3 text-[14px] font-semibold">
+          <div className="overflow-hidden">
+            <p className="text-brand3 text-[14px] font-semibold truncate">
               {row.original.full_name}
             </p>
-            <p className="text-brand4"> {row.original.email}</p>
+            <p className="text-brand4 truncate"> {row.original.email}</p>
           </div>
         </div>
       ),
@@ -118,7 +124,7 @@ const UsersDataTable = ({
         <Popover>
           <PopoverTrigger asChild>
             <button
-              className={`rounded-2xl py-0.5 px-2.5 text-sm font-medium
+              className={`rounded-2xl py-0.5 min-w-10 px-2.5 text-sm font-medium
         ${
           row.original.role === "ADMIN"
             ? "text-[#027A48] bg-[#ECFDF3]"
@@ -217,7 +223,16 @@ const UsersDataTable = ({
       </Dialog>
     );
   };
-  return <DataTable data={data} columns={columns} Actions={Actions} />;
+  return (
+    <DataTable
+      data={data}
+      columns={columns}
+      Actions={Actions}
+      total={total ?? 0}
+      page={page}
+      limit={limit}
+    />
+  );
 };
 
 export default UsersDataTable;

@@ -1,5 +1,6 @@
 import PageHead from "@/components/dashboard/PageHead";
 import UsersDataTable from "@/components/dashboard/users/UsersDataTable";
+import { getPaginationInfo } from "@/utils";
 import { createClient } from "@/utils/supabase/supabase-server";
 import { Suspense } from "react";
 
@@ -8,16 +9,17 @@ const AllUsers = async ({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
-  const { search = "" } = await searchParams;
+  const { search = "", page } = await searchParams;
+  const { from, to, page: pageNumber, limit } = getPaginationInfo(String(page));
 
   const supabase = await createClient();
 
-  const { data: users } = await supabase
+  const { data: users, count } = await supabase
     .from("users")
-    .select("*", { count: "estimated" })
+    .select("*", { count: "exact" })
     .or(`full_name.ilike.%${search}%,email.ilike.%${search}%`)
     .order("created_at", { ascending: false })
-    .range(2, 3);
+    .range(from, to);
   const { data: currentUser } = await supabase.rpc("get_current_user");
 
   return (
@@ -31,6 +33,9 @@ const AllUsers = async ({
         </p>
         <UsersDataTable
           data={users ?? []}
+          total={count ?? 0}
+          page={pageNumber}
+          limit={limit}
           currentUserId={currentUser?.data?.id ?? ""}
         />
       </div>
