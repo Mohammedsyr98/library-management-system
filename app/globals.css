@@ -14,6 +14,8 @@
 @theme inline {
   --color-brand1: #25388c;
   --color-brand2: #f8f8ff;
+  --color-brand3: #1e293b;
+  --color-brand4: #64748b;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -129,6 +131,9 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+button {
+  cursor: pointer;
 }
 table {
   width: 100%;
