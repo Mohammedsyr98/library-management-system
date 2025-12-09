@@ -12,18 +12,8 @@ import { useDeleteUser, useUpdateUserRole } from "@/hooks/useUsers";
 import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/navigation";
 import { Database } from "@/type/database.types";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { useState } from "react";
-import { Oval } from "react-loader-spinner";
+import ConfirmDeleteUserModal from "./ConfirmDeleteUserModal";
 
 const UsersDataTable = ({
   data,
@@ -38,7 +28,8 @@ const UsersDataTable = ({
   page: number;
   limit: number;
 }) => {
-  const [dialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
 
   const { mutate: updateUserRole } = useUpdateUserRole();
   const { mutate: deleteUser, isPending: pendingDelete } = useDeleteUser();
@@ -56,7 +47,7 @@ const UsersDataTable = ({
       {
         onSuccess: () => {
           showToast("User role updated successfully.", "success");
-          setIsDialogOpen(false);
+          setIsOpen(false);
           router.refresh();
         },
         onError: (error: { message: string }) => {
@@ -71,11 +62,14 @@ const UsersDataTable = ({
       showToast("You cannot delete your account.", "error");
       return;
     }
+
     deleteUser(
       { userId },
       {
-        onSuccess: (data) => {
+        onSuccess: () => {
+          setIsOpen(false);
           showToast("User deleted successfully.", "success");
+
           router.refresh();
         },
         onError: (error: { message: string }) => {
@@ -171,67 +165,39 @@ const UsersDataTable = ({
 
   const Actions = ({ row }: { row: IUser }) => {
     return (
-      <Dialog open={dialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger asChild>
-          <button className="text-black hover:text-red-600 transition">
-            <FaRegTrashAlt />
-          </button>
-        </DialogTrigger>
-
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <DialogTitle>Delete User</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete{" "}
-              <span className="font-semibold">{row.full_name}</span>? <br />
-              This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-
-          <DialogFooter className="mt-4 flex justify-end gap-2">
-            <DialogClose asChild>
-              <button
-                disabled={pendingDelete}
-                onClick={() => setIsDialogOpen(false)}
-                className="px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200 disabled:opacity-50">
-                Cancel
-              </button>
-            </DialogClose>
-
-            <DialogClose asChild>
-              <button
-                disabled={pendingDelete}
-                onClick={() => handleDeleteUser({ userId: row.id })}
-                className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 flex items-center gap-2">
-                {pendingDelete ? (
-                  <Oval
-                    height={20}
-                    width={20}
-                    color="#4fa94d"
-                    visible={true}
-                    ariaLabel="oval-loading"
-                    secondaryColor="#4fa94d"
-                    strokeWidth={2}
-                    strokeWidthSecondary={2}
-                  />
-                ) : null}
-                Delete
-              </button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <button
+        onClick={() => {
+          setSelectedUser(row);
+          setIsOpen(true);
+        }}
+        className="text-black hover:text-red-600 transition-colors duration-200">
+        <FaRegTrashAlt />
+      </button>
     );
   };
+
   return (
-    <DataTable
-      data={data}
-      columns={columns}
-      Actions={Actions}
-      total={total ?? 0}
-      page={page}
-      limit={limit}
-    />
+    <>
+      {" "}
+      <DataTable
+        data={data}
+        columns={columns}
+        Actions={Actions}
+        total={total ?? 0}
+        page={page}
+        limit={limit}
+      />
+      {selectedUser && (
+        <ConfirmDeleteUserModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          selectedUser={selectedUser}
+          isPending={pendingDelete}
+          setSelectedUser={setSelectedUser}
+          onDelete={() => handleDeleteUser({ userId: selectedUser.id })}
+        />
+      )}
+    </>
   );
 };
 
