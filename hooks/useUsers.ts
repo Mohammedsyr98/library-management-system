@@ -1,4 +1,5 @@
 import { deleteUser, updateUserRole } from "@/Services/services";
+import { User } from "@supabase/supabase-js";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 
 export const useUpdateUserRole = (): UseMutationResult<
@@ -16,11 +17,11 @@ export const useUpdateUserRole = (): UseMutationResult<
 };
 
 export const useDeleteUser = (): UseMutationResult<
-  IResponse["data"][],
+  User,
   IErrorResponse,
   { userId: string }
 > => {
-  return useMutation<IResponse["data"][], IErrorResponse, { userId: string }>({
+  return useMutation<User, IErrorResponse, { userId: string }>({
     mutationFn: ({ userId }) => deleteUser({ userId }),
   });
 };

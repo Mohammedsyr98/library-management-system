@@ -76,14 +76,24 @@ export const updateUserRole = async ({
 };
 
 export const deleteUser = async ({ userId }: { userId: string }) => {
-  const { data, error } = await supabase
-    .from("users")
-    .delete()
-    .eq("id", userId)
-    .select();
-  if (error) throw { message: error.message } as IErrorResponse;
-  if (!data || data.length === 0) {
-    throw { message: "Delete failed." } as IErrorResponse;
+  const token = (await supabase.auth.getSession()).data.session?.access_token;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/bright-worker`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ userId }),
+    }
+  );
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw { message: data.message || "Delete failed." };
   }
-  return data as IResponse["data"][];
+
+  return data;
 };
