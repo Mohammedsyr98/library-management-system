@@ -14,6 +14,8 @@ import { useRouter } from "next/navigation";
 import { Database } from "@/type/database.types";
 import { useState } from "react";
 import ConfirmDeleteUserModal from "./ConfirmDeleteUserModal";
+import { PopoverMenu } from "@/components/PopoverMenu";
+import { ROLES } from "@/constants/constants";
 
 const UsersDataTable = ({
   data,
@@ -115,44 +117,27 @@ const UsersDataTable = ({
     {
       accessorKey: "role",
       cell: ({ row }) => (
-        <Popover>
-          <PopoverTrigger asChild>
+        <PopoverMenu
+          trigger={
             <button
               className={`rounded-2xl py-0.5 min-w-10 px-2.5 text-sm font-medium
-        ${
-          row.original.role === "ADMIN"
-            ? "text-[#027A48] bg-[#ECFDF3]"
-            : "text-pink-700 bg-[#FDF2FA]"
-        }`}>
+      ${
+        row.original.role === "ADMIN"
+          ? "text-[#027A48] bg-[#ECFDF3]"
+          : "text-pink-700 bg-[#FDF2FA]"
+      }`}>
               {row.original.role}
             </button>
-          </PopoverTrigger>
-
-          <PopoverContent align="start" className="w-44 p-2">
-            <div className="flex flex-col gap-1">
-              {["ADMIN", "USER"].map((role) => (
-                <button
-                  onClick={() =>
-                    row.original.role !== role &&
-                    handleUpdateUserRole({
-                      userId: row.original.id,
-                      newRole: role as "USER" | "ADMIN",
-                    })
-                  }
-                  key={role}
-                  className={`flex items-center justify-between w-full px-3 py-2 rounded-lg text-sm
-            hover:bg-gray-100 transition
-            ${row.original.role === role ? "font-semibold" : "text-gray-700"}`}>
-                  {role}
-
-                  {row.original.role === role && (
-                    <AiOutlineCheck className="w-4 h-4 text-green-600 font-bold" />
-                  )}
-                </button>
-              ))}
-            </div>
-          </PopoverContent>
-        </Popover>
+          }
+          value={row.original.role}
+          options={ROLES}
+          onUpdate={(newRole) =>
+            handleUpdateUserRole({
+              userId: row.original.id,
+              newRole: newRole,
+            })
+          }
+        />
       ),
       header: () => "Role",
     },

@@ -3,6 +3,7 @@ import BorrowRequestIcon from "@/public/tsx-icons/BorrowRequestIcon";
 import HomeIcon from "@/public/tsx-icons/HomeIcon";
 import PersonIcon from "@/public/tsx-icons/PersonIcon";
 import UsersIcon from "@/public/tsx-icons/UsersIcon";
+import { Database } from "@/type/database.types";
 
 export const navLinks = [
   {
@@ -31,3 +32,5 @@ export const navLinks = [
     path: "/dashboard/account-requests",
   },
 ];
+
+export const ROLES = ["ADMIN", "USER"] as Database["public"]["Enums"]["role"][];

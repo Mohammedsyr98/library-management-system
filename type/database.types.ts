@@ -21,7 +21,7 @@ export type Database = {
           full_name: string;
           id: string;
           last_activity_date: string | null;
-          role: Database["public"]["Enums"]["role"] | null;
+          role: Database["public"]["Enums"]["role"];
           status: Database["public"]["Enums"]["status"] | null;
           Borrowed_books: number;
           university_id: number | null;
