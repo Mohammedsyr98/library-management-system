@@ -14,36 +14,65 @@ export type Database = {
   };
   public: {
     Tables: {
+      books: {
+        Row: {
+          author: string;
+          created_at: string;
+          genre: Json;
+          id: number;
+          image: string | null;
+          title: string;
+        };
+        Insert: {
+          author?: string;
+          created_at?: string;
+          genre?: Json;
+          id?: number;
+          image?: string | null;
+          title?: string;
+        };
+        Update: {
+          author?: string;
+          created_at?: string;
+          genre?: Json;
+          id?: number;
+          image?: string | null;
+          title?: string;
+        };
+        Relationships: [];
+      };
       users: {
         Row: {
+          Borrowed_books: number;
           created_at: string | null;
           email: string;
           full_name: string;
           id: string;
           last_activity_date: string | null;
           role: Database["public"]["Enums"]["role"];
-          status: Database["public"]["Enums"]["status"] | null;
-          Borrowed_books: number;
+          status: Database["public"]["Enums"]["status"];
           university_id: number | null;
         };
         Insert: {
+          Borrowed_books?: number;
           created_at?: string | null;
           email: string;
-          full_name?: string | null;
+          full_name: string;
           id: string;
           last_activity_date?: string | null;
-          role?: Database["public"]["Enums"]["role"] | null;
-          status?: Database["public"]["Enums"]["status"] | null;
+          role?: Database["public"]["Enums"]["role"];
+          status?: Database["public"]["Enums"]["status"];
           university_id?: number | null;
         };
         Update: {
+          Borrowed_books?: number;
           created_at?: string | null;
           email?: string;
-          full_name?: string | null;
+          full_name?: string;
           id?: string;
           last_activity_date?: string | null;
-          role?: Database["public"]["Enums"]["role"] | null;
-          status?: Database["public"]["Enums"]["status"] | null;
+          role?: Database["public"]["Enums"]["role"];
+          status?: Database["public"]["Enums"]["status"];
           university_id?: number | null;
         };
         Relationships: [];
