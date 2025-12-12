@@ -94,7 +94,7 @@ const DataTable = <T,>({
               {table.getRowModel().rows.map((row) => (
                 <tr key={row.id} className="border-t">
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="p-3">
+                    <td key={cell.id} className="p-3 font-medium">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

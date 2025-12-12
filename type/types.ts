@@ -33,4 +33,11 @@ declare global {
     userId: string;
     newRole: Database["public"]["Enums"]["role"];
   }
+  interface ResourceTableProps<T> {
+    data: T[];
+    currentUserId?: string;
+    total: number;
+    page: number;
+    limit: number;
+  }
 }

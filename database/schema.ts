@@ -34,7 +34,7 @@ export const books = pgTable(
     title: text().default("").notNull(),
     image: text(),
     author: text().default("").notNull(),
-    genre: jsonb().default([]).notNull(),
+    genre: text().array().default([]).notNull(),
     createdAt: timestamp("created_at", { mode: "string" })
       .default(sql`(now() AT TIME ZONE 'utc'::text)`)
       .notNull(),
