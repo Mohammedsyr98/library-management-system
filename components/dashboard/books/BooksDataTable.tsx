@@ -1,22 +1,48 @@
 "use client";
-import { Database } from "@/type/database.types";
+
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import React, { useState } from "react";
 import DataTable from "../DataTable";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { Pen } from "lucide-react";
+import ConfirmDeleteBookModal from "./ConfirmDeleteBookModal";
+import { useDeleteBook } from "@/hooks/useBooks";
+import { useToast } from "@/hooks/useToast";
+import { useRouter } from "next/navigation";
 
-type BooksRow = Database["public"]["Tables"]["books"]["Row"];
 const BooksDataTable = ({
   data,
   total,
   page,
   limit,
-}: ResourceTableProps<BooksRow>) => {
+}: ResourceTableProps<BookRow>) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedBook, setSelectedBook] = useState<BooksRow | null>(null);
-  const columns: ColumnDef<BooksRow>[] = [
+  const [selectedBook, setSelectedBook] = useState<BookRow | null>(null);
+
+  const { showToast } = useToast();
+  const router = useRouter();
+
+  const { mutate: deleteBook, isPending: pendingDelete } = useDeleteBook();
+
+  const handleDeleteBook = ({ bookId }: { bookId: BookRow["id"] }) => {
+    deleteBook(
+      { bookId },
+      {
+        onSuccess: (data) => {
+          setIsOpen(false);
+          showToast(data.message, "success");
+
+          router.refresh();
+        },
+        onError: (error: { message: string }) => {
+          showToast(error.message, "error");
+        },
+      }
+    );
+  };
+
+  const columns: ColumnDef<BookRow>[] = [
     {
       accessorKey: "title",
 
@@ -53,7 +79,7 @@ const BooksDataTable = ({
     },
   ];
 
-  const Actions = ({ row }: { row: BooksRow }) => {
+  const Actions = ({ row }: { row: BookRow }) => {
     return (
       <>
         <button
@@ -76,14 +102,26 @@ const BooksDataTable = ({
     );
   };
   return (
-    <DataTable
-      data={data}
-      columns={columns}
-      Actions={Actions}
-      total={total ?? 0}
-      page={page}
-      limit={limit}
-    />
+    <>
+      <DataTable
+        data={data}
+        columns={columns}
+        Actions={Actions}
+        total={total ?? 0}
+        page={page}
+        limit={limit}
+      />
+      {selectedBook && (
+        <ConfirmDeleteBookModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          selectedBook={selectedBook}
+          isPending={pendingDelete}
+          setSelectedBook={setSelectedBook}
+          onDelete={() => handleDeleteBook({ bookId: selectedBook.id })}
+        />
+      )}
+    </>
   );
 };
 
