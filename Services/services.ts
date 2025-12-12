@@ -97,3 +97,11 @@ export const deleteUser = async ({ userId }: { userId: string }) => {
 
   return data;
 };
+
+/* -- Books -- */
+
+export const deleteBook = async ({ bookId }: { bookId: BookRow["id"] }) => {
+  const { error } = await supabase.from("books").delete().eq("id", bookId);
+  if (error) throw { message: error.message } as IErrorResponse;
+  return { message: "Book deleted successfully" };
+};

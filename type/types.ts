@@ -40,4 +40,6 @@ declare global {
     page: number;
     limit: number;
   }
+
+  type BookRow = Database["public"]["Tables"]["books"]["Row"];
 }

@@ -2,7 +2,7 @@ import BooksDataTable from "@/components/dashboard/books/BooksDataTable";
 import PageHead from "@/components/dashboard/PageHead";
 import { getPaginationInfo } from "@/utils";
 import { createClient } from "@/utils/supabase/supabase-server";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 
 const AllBooks = async ({
   searchParams,
