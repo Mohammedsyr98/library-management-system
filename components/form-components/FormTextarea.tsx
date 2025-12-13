@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   Control,
   Controller,
@@ -6,9 +5,8 @@ import {
   FieldValues,
   Path,
 } from "react-hook-form";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
-interface FormInputProps<T extends FieldValues> {
+interface FormTextareaProps<T extends FieldValues> {
   name: Path<T>;
   label?: string;
   type?: string;
@@ -20,21 +18,16 @@ interface FormInputProps<T extends FieldValues> {
   labelClassName?: string;
 }
 
-function FormInput<T extends FieldValues>({
+function FormTextarea<T extends FieldValues>({
   name,
   label,
-  type = "text",
   placeholder,
   control,
   errors,
   className,
   inputClassName,
   labelClassName,
-}: FormInputProps<T>) {
-  const [showPassword, setShowPassword] = useState(false);
-  const inputType =
-    type === "password" ? (showPassword ? "text" : "password") : type;
-
+}: FormTextareaProps<T>) {
   return (
     <div className={`${className} mb-4 relative `}>
       {label && (
@@ -47,9 +40,8 @@ function FormInput<T extends FieldValues>({
         name={name}
         control={control}
         render={({ field }) => (
-          <input
+          <textarea
             {...field}
-            type={inputType}
             placeholder={placeholder}
             className={`w-full bg-[#232839] rounded px-5 py-4 focus:outline-none border ${
               errors && errors[name]
@@ -59,18 +51,6 @@ function FormInput<T extends FieldValues>({
           />
         )}
       />
-      {type === "password" && (
-        <button
-          type="button"
-          onClick={() => setShowPassword((prev) => !prev)}
-          className="absolute right-3 top-[50px] text-gray-500">
-          {showPassword ? (
-            <AiOutlineEyeInvisible size={20} />
-          ) : (
-            <AiOutlineEye size={20} />
-          )}
-        </button>
-      )}
       {errors && errors[name] && (
         <p className="text-red-500 text-sm mt-1 absolute">
           {errors[name]?.message?.toString()}
@@ -80,4 +60,4 @@ function FormInput<T extends FieldValues>({
   );
 }
 
-export default FormInput;
+export default FormTextarea;

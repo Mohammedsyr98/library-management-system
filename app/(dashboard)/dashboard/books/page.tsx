@@ -1,4 +1,5 @@
 import BooksDataTable from "@/components/dashboard/books/BooksDataTable";
+import CreateBookButton from "@/components/dashboard/books/CreateBookButton";
 import PageHead from "@/components/dashboard/PageHead";
 import { getPaginationInfo } from "@/utils";
 import { createClient } from "@/utils/supabase/supabase-server";
@@ -32,9 +33,11 @@ const AllBooks = async ({
         <PageHead />
       </Suspense>
       <div className="bg-white mx-6 p-5 rounded-[14px] mt-10">
-        <p className="text-[20px] font-semibold text-[#1E293B] mb-[23px]">
-          All Books
-        </p>
+        <div className="flex items-end mb-[23px] justify-between">
+          <p className="text-[20px] font-semibold text-[#1E293B]">All Books</p>{" "}
+          <CreateBookButton />
+        </div>
+
         <BooksDataTable
           data={books ?? []}
           total={count ?? 0}
