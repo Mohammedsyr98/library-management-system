@@ -1,16 +1,113 @@
 {
-  "id": "16f11108-1483-406d-9e54-9df11f35772c",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.books": {
+      "name": "books",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "byDefault",
+            "name": "books_id_seq",
+            "increment": "1",
+            "minValue": "1",
+            "maxValue": "9223372036854775807",
+            "startWith": "1",
+            "cache": "1",
+            "cycle": false,
+            "schema": "public"
+          }
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "author": {
+          "name": "author",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(now() AT TIME ZONE 'utc'::text)"
+        },
+        "genre": {
+          "name": "genre",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{\"\"}'"
+        },
+        "summary": {
+          "name": "summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {
+        "Authenticated users can read books": {
+          "name": "Authenticated users can read books",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "authenticated"
+          ],
+          "using": "true"
+        },
+        "books_delete": {
+          "name": "books_delete",
+          "as": "PERMISSIVE",
+          "for": "DELETE",
+          "to": [
+            "authenticated"
+          ]
+        },
+        "books_update": {
+          "name": "books_update",
+          "as": "PERMISSIVE",
+          "for": "UPDATE",
+          "to": [
+            "authenticated"
+          ]
+        }
+      },
+      "isRLSEnabled": true
+    },
     "public.users": {
       "name": "users",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true
         },
@@ -24,7 +121,7 @@
           "name": "full_name",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "university_id": {
           "name": "university_id",
@@ -37,7 +134,7 @@
           "type": "role",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "'USER'"
         },
         "status": {
@@ -45,7 +142,7 @@
           "type": "status",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "'PENDING'"
         },
         "last_activity_date": {
@@ -61,50 +158,98 @@
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
+        },
+        "Borrowed_books": {
+          "name": "Borrowed_books",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "users_auth_fk": {
+          "name": "users_auth_fk",
+          "tableFrom": "users",
+          "tableTo": "users",
+          "schemaTo": "auth",
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "users_email_unique": {
-          "name": "users_email_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "email"
+          ],
+          "nullsNotDistinct": false,
+          "name": "users_email_unique"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {
+        "users_delete_based_on_role": {
+          "name": "users_delete_based_on_role",
+          "as": "PERMISSIVE",
+          "for": "DELETE",
+          "to": [
+            "authenticated"
+          ],
+          "using": "(((((auth.jwt() -> 'user_metadata'::text) ->> 'role'::text) = 'USER'::text) AND (id = auth.uid())) OR (((auth.jwt() -> 'user_metadata'::text) ->> 'role'::text) = 'ADMIN'::text))"
+        },
+        "users_read_based_on_role": {
+          "name": "users_read_based_on_role",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "authenticated"
+          ]
+        },
+        "users_update_based_on_role": {
+          "name": "users_update_based_on_role",
+          "as": "PERMISSIVE",
+          "for": "UPDATE",
+          "to": [
+            "authenticated"
           ]
         }
       },
-      "policies": {},
-      "checkConstraints": {},
       "isRLSEnabled": true
     }
   },
   "enums": {
     "public.borrow_status": {
       "name": "borrow_status",
-      "schema": "public",
       "values": [
         "BORROWED",
         "RETURNED"
-      ]
+      ],
+      "schema": "public"
     },
     "public.role": {
       "name": "role",
-      "schema": "public",
       "values": [
         "USER",
         "ADMIN"
-      ]
+      ],
+      "schema": "public"
     },
     "public.status": {
       "name": "status",
-      "schema": "public",
       "values": [
         "PENDING",
         "APPROVED",
         "REJECTED"
-      ]
+      ],
+      "schema": "public"
     }
   },
   "schemas": {},
@@ -113,8 +258,24 @@
   "policies": {},
   "views": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {
+      "books": {
+        "columns": {
+          "created_at": {
+            "isDefaultAnExpression": true
+          },
+          "genre": {
+            "isArray": true,
+            "dimensions": 1,
+            "rawType": "text"
+          }
+        }
+      }
+    }
   }
 }
