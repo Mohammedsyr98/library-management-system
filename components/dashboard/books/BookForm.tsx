@@ -3,6 +3,8 @@ import FormImageInput from "@/components/form-components/FormImageInput";
 import FormInput from "@/components/form-components/FormInput";
 import FormTextarea from "@/components/form-components/FormTextarea";
 import { Button } from "@/components/ui/Button";
+import { useAddBook } from "@/hooks/useBooks";
+import { useToast } from "@/hooks/useToast";
 import { BookFormSchema } from "@/validations/validations";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowLeft, Upload, X } from "lucide-react";
@@ -13,20 +15,44 @@ import { useForm } from "react-hook-form";
 
 const BookForm = () => {
   const [imagePreview, setImagePreview] = useState<string | null>();
+  const { showToast } = useToast();
 
+  const { mutate: addBook, isPending } = useAddBook();
   const {
     control,
     formState: { errors },
     setValue,
     handleSubmit,
+    reset,
   } = useForm<BookFormData>({
     resolver: yupResolver(BookFormSchema),
+    defaultValues: {
+      title: "",
+      author: "",
+      genre: "",
+      image: null,
+      summary: "",
+      totalBooks: 0,
+    },
   });
 
   const router = useRouter();
 
-  const onSubmit = () => {
-    console.log("");
+  const onSubmit = (data: BookFormData) => {
+    addBook(
+      { BookFormData: data },
+      {
+        onSuccess: (data) => {
+          showToast(data.message, "success");
+          reset();
+          setImagePreview("");
+          router.refresh();
+        },
+        onError: (error) => {
+          showToast(error.message, "error");
+        },
+      }
+    );
   };
 
   return (
@@ -131,7 +157,7 @@ const BookForm = () => {
           labelClassName="text-black"
           placeholder="Write a brief summary of the book"
         />
-        <Button label="Create Book" variant="brand1" />
+        <Button isPending={isPending} label="Create Book" variant="brand1" />
       </form>
     </div>
   );
