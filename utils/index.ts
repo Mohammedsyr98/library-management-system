@@ -1,3 +1,5 @@
+import { supabase } from "@/lib/supabaseClient";
+
 export function getPaginationInfo(pageParam: string | undefined) {
   const limit = 6;
   const page = Number(pageParam) || 1;
@@ -25,3 +27,11 @@ export function getPaginationRange(current: number, total: number) {
 
   return range;
 }
+
+export const getBookImageUrl = (path?: string | null) => {
+  if (!path) return "/images/book-placeholder.png";
+
+  const { data } = supabase.storage.from("media").getPublicUrl(path);
+
+  return data.publicUrl;
+};

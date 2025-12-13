@@ -1,6 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "./database.types";
-
+import * as yup from "yup";
+import { BookFormSchema } from "@/validations/validations";
 export {};
 
 declare global {
@@ -42,4 +43,6 @@ declare global {
   }
 
   type BookRow = Database["public"]["Tables"]["books"]["Row"];
+
+  type BookFormData = yup.InferType<typeof BookFormSchema>;
 }

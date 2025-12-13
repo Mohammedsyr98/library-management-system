@@ -22,6 +22,7 @@ export type Database = {
           id: number;
           image: string | null;
           title: string;
+          summary: string;
         };
         Insert: {
           author?: string;
@@ -30,6 +31,7 @@ export type Database = {
           id?: number;
           image?: string | null;
           title?: string;
+          summary: string;
         };
         Update: {
           author?: string;
@@ -38,6 +40,7 @@ export type Database = {
           id?: number;
           image?: string | null;
           title?: string;
+          summary: string;
         };
         Relationships: [];
       };

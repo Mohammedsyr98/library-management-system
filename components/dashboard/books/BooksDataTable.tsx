@@ -10,6 +10,7 @@ import ConfirmDeleteBookModal from "./ConfirmDeleteBookModal";
 import { useDeleteBook } from "@/hooks/useBooks";
 import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/navigation";
+import { getBookImageUrl } from "@/utils";
 
 const BooksDataTable = ({
   data,
@@ -49,7 +50,7 @@ const BooksDataTable = ({
       cell: ({ row }) => (
         <div className="flex items-center gap-x-2 min-w-0">
           <Image
-            src={row.original.image ?? ""}
+            src={getBookImageUrl(row.original.image)}
             width={40}
             height={50}
             alt={`${row.original.title} book image`}
