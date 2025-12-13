@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import { Database } from "@/type/database.types";
 
 /* -- Auth -- */
 export const signIn = async (data: SignInFormData) => {
@@ -99,6 +100,40 @@ export const deleteUser = async ({ userId }: { userId: string }) => {
 };
 
 /* -- Books -- */
+
+export const AddBook = async ({
+  BookFormData,
+}: {
+  BookFormData: BookFormData;
+}) => {
+  const { data, error: uploadImageError } = await supabase.storage
+    .from("media")
+    .upload(`books/photos/${BookFormData.title}.png`, BookFormData.image!, {
+      upsert: true,
+    });
+  if (uploadImageError)
+    throw { message: uploadImageError.message } as IErrorResponse;
+  const { error: insertError } = await supabase
+    .from("books")
+    .insert([
+      {
+        title: BookFormData.title,
+        author: BookFormData.author,
+        genre: BookFormData.genre
+          .split(/[,\s]+/)
+          .map((g) => g.trim())
+          .filter(Boolean),
+        summary: BookFormData.summary,
+        image: data.path,
+      },
+    ])
+    .select();
+  if (insertError) {
+    await supabase.storage.from("media").remove([data.path]);
+    throw insertError;
+  }
+  return { message: "Book added successfully" };
+};
 
 export const deleteBook = async ({ bookId }: { bookId: BookRow["id"] }) => {
   const { error } = await supabase.from("books").delete().eq("id", bookId);
