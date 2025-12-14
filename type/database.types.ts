@@ -23,6 +23,8 @@ export type Database = {
           image: string | null;
           title: string;
           summary: string;
+          total_books: number;
+          updated_at: string;
         };
         Insert: {
           author?: string;
@@ -32,6 +34,8 @@ export type Database = {
           image?: string | null;
           title?: string;
           summary: string;
+          total_books: number;
+          updated_at?: string;
         };
         Update: {
           author?: string;
@@ -41,6 +45,8 @@ export type Database = {
           image?: string | null;
           title?: string;
           summary: string;
+          total_books: number;
+          updated_at?: string;
         };
         Relationships: [];
       };

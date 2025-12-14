@@ -35,3 +35,10 @@ export const getBookImageUrl = (path?: string | null) => {
 
   return data.publicUrl;
 };
+
+export const urlToObject = async (image: string) => {
+  const response = await fetch(getBookImageUrl(image));
+  const blob = await response.blob();
+  const file = new File([blob], "image.jpg", { type: blob.type });
+  return file;
+};

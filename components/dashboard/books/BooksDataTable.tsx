@@ -50,7 +50,7 @@ const BooksDataTable = ({
       cell: ({ row }) => (
         <div className="flex items-center gap-x-2 min-w-0">
           <Image
-            src={getBookImageUrl(row.original.image)}
+            src={`${getBookImageUrl(row.original.image)}?v=${row.original.updated_at}`}
             width={40}
             height={50}
             alt={`${row.original.title} book image`}
@@ -85,8 +85,7 @@ const BooksDataTable = ({
       <>
         <button
           onClick={() => {
-            setSelectedBook(row);
-            setIsOpen(true);
+            router.push(`/dashboard/books/${row.id}`);
           }}
           className="text-[#0089F1]  hover:text-[#006FCC] transition-colors duration-200">
           <Pen className="w-4.5 h-4.5" />

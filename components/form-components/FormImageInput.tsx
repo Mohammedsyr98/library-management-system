@@ -56,6 +56,7 @@ const FormImageInput = <T extends FieldValues>({
     },
     onDropAccepted: (files) => {
       field.onChange(files[0]);
+
       setImagePreview(URL.createObjectURL(files[0]));
     },
   });

@@ -3,21 +3,24 @@ import FormImageInput from "@/components/form-components/FormImageInput";
 import FormInput from "@/components/form-components/FormInput";
 import FormTextarea from "@/components/form-components/FormTextarea";
 import { Button } from "@/components/ui/Button";
-import { useAddBook } from "@/hooks/useBooks";
+import { useAddBook, useUpdateBook } from "@/hooks/useBooks";
 import { useToast } from "@/hooks/useToast";
+import { getBookImageUrl, urlToObject } from "@/utils";
 import { BookFormSchema } from "@/validations/validations";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowLeft, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 
-const BookForm = () => {
+const BookForm = ({ editBook }: { editBook?: BookRow }) => {
   const [imagePreview, setImagePreview] = useState<string | null>();
+
   const { showToast } = useToast();
 
-  const { mutate: addBook, isPending } = useAddBook();
+  const { mutate: addBook, isPending: pendingAdd } = useAddBook();
+  const { mutate: updateBook, isPending: pendingUpdate } = useUpdateBook();
   const {
     control,
     formState: { errors },
@@ -32,28 +35,62 @@ const BookForm = () => {
       genre: "",
       image: null,
       summary: "",
-      totalBooks: 0,
+      total_books: 0,
     },
+    mode: "onChange",
   });
 
   const router = useRouter();
 
   const onSubmit = (data: BookFormData) => {
-    addBook(
-      { BookFormData: data },
-      {
-        onSuccess: (data) => {
-          showToast(data.message, "success");
-          reset();
-          setImagePreview("");
-          router.refresh();
-        },
-        onError: (error) => {
-          showToast(error.message, "error");
-        },
-      }
-    );
+    if (!editBook) {
+      addBook(
+        { BookFormData: data },
+        {
+          onSuccess: (data) => {
+            showToast(data.message, "success");
+            reset();
+            setImagePreview("");
+            router.refresh();
+          },
+          onError: (error) => {
+            showToast(error.message, "error");
+          },
+        }
+      );
+    } else {
+      const imageKey = editBook?.image?.split("/")[2] ?? "";
+      updateBook(
+        { BookFormData: data, bookId: editBook.id, imageKey },
+        {
+          onSuccess: (data) => {
+            showToast(data.message, "success");
+            router.refresh();
+          },
+          onError: (error) => {
+            showToast(error.message, "error");
+          },
+        }
+      );
+    }
   };
+
+  const setEditBook = useEffectEvent(async (editBook: BookRow) => {
+    setImagePreview(
+      `${getBookImageUrl(editBook.image)}?v=${editBook.updated_at}`
+    );
+    reset({
+      ...editBook,
+      image: await urlToObject(editBook.image ?? ""),
+      genre: Array(editBook.genre).join(" "),
+    });
+  });
+
+  useEffect(() => {
+    if (editBook) {
+      setEditBook(editBook);
+    }
+  }, [editBook]);
 
   return (
     <div className="w-2/3">
@@ -96,7 +133,7 @@ const BookForm = () => {
         />
         <FormInput
           control={control}
-          name="totalBooks"
+          name="total_books"
           errors={errors}
           label="Total number of books"
           inputClassName="bg-white border-[#CBD5E1]!"
@@ -157,7 +194,11 @@ const BookForm = () => {
           labelClassName="text-black"
           placeholder="Write a brief summary of the book"
         />
-        <Button isPending={isPending} label="Create Book" variant="brand1" />
+        <Button
+          isPending={pendingAdd || pendingUpdate}
+          label={editBook ? "Update Book" : "Create Book"}
+          variant="brand1"
+        />
       </form>
     </div>
   );

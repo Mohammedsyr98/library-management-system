@@ -42,7 +42,7 @@ export const BookFormSchema = yup.object({
 
   genre: yup.string().required("Genre is required"),
 
-  totalBooks: yup
+  total_books: yup
     .number()
     .typeError("Total number of books must be a number")
     .required("Total number of books is required")
