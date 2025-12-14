@@ -14,19 +14,13 @@ const AllBooks = async ({
   const { from, to, page: pageNumber, limit } = getPaginationInfo(String(page));
 
   const supabase = await createClient();
-  const {
-    data: books,
-    count,
-    error,
-  } = await supabase
+  const { data: books, count } = await supabase
     .from("books")
     .select("*", { count: "exact" })
     .or(`title.ilike.%${search}%,author.ilike.%${search}%,genre.cs.{${search}}`)
-
     .order("created_at", { ascending: false })
     .range(from, to);
 
-  console.log(error);
   return (
     <div>
       <Suspense fallback={<div></div>}>

@@ -45,7 +45,7 @@ export const Button = ({
         variantStyles[variant],
         "w-full text-black rounded-[6px] font-bold mt-8 flex items-center justify-center gap-2 transition-colors",
         (props.disabled ?? isPending)
-          ? "cursor-not-allowed opacity-70"
+          ? "cursor-not-allowed! opacity-70"
           : "cursor-pointer",
         height ?? "h-14",
         props.className

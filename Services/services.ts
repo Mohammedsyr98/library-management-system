@@ -101,14 +101,14 @@ export const deleteUser = async ({ userId }: { userId: string }) => {
 
 /* -- Books -- */
 
-export const AddBook = async ({
+export const addBook = async ({
   BookFormData,
 }: {
   BookFormData: BookFormData;
 }) => {
   const { data, error: uploadImageError } = await supabase.storage
     .from("media")
-    .upload(`books/photos/${BookFormData.title}.png`, BookFormData.image!, {
+    .upload(`books/photos/${crypto.randomUUID()}.png`, BookFormData.image!, {
       upsert: true,
     });
   if (uploadImageError)
@@ -125,6 +125,7 @@ export const AddBook = async ({
           .filter(Boolean),
         summary: BookFormData.summary,
         image: data.path,
+        total_books: BookFormData.total_books,
       },
     ])
     .select();
@@ -133,6 +134,45 @@ export const AddBook = async ({
     throw insertError;
   }
   return { message: "Book added successfully" };
+};
+
+export const editBook = async ({
+  BookFormData,
+  bookId,
+  imageKey,
+}: {
+  BookFormData: BookFormData;
+  bookId: BookRow["id"];
+  imageKey: string;
+}) => {
+  const { data, error: uploadImageError } = await supabase.storage
+    .from("media")
+    .upload(`books/photos/${imageKey}`, BookFormData.image!, {
+      upsert: true,
+      cacheControl: "0",
+    });
+  if (uploadImageError)
+    throw { message: uploadImageError.message } as IErrorResponse;
+  const { error: insertError } = await supabase
+    .from("books")
+    .update({
+      title: BookFormData.title,
+      author: BookFormData.author,
+      genre: BookFormData.genre
+        .split(/[,\s]+/)
+        .map((g) => g.trim())
+        .filter(Boolean),
+      summary: BookFormData.summary,
+      image: data.path,
+      total_books: BookFormData.total_books,
+    })
+    .eq("id", bookId)
+    .select();
+  if (insertError) {
+    await supabase.storage.from("media").remove([data.path]);
+    throw insertError;
+  }
+  return { message: "Book updated successfully" };
 };
 
 export const deleteBook = async ({ bookId }: { bookId: BookRow["id"] }) => {
