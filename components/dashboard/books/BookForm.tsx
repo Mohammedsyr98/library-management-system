@@ -1,5 +1,6 @@
 "use client";
 import FormImageInput from "@/components/form-components/FormImageInput";
+import FormImagePreview from "@/components/form-components/FormImagePreview";
 import FormInput from "@/components/form-components/FormInput";
 import FormTextarea from "@/components/form-components/FormTextarea";
 import { Button } from "@/components/ui/Button";
@@ -8,8 +9,7 @@ import { useToast } from "@/hooks/useToast";
 import { getBookImageUrl, urlToObject } from "@/utils";
 import { BookFormSchema } from "@/validations/validations";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ArrowLeft, Upload, X } from "lucide-react";
-import Image from "next/image";
+import { ArrowLeft, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useEffectEvent, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -156,34 +156,13 @@ const BookForm = ({ editBook }: { editBook?: BookRow }) => {
           }
           label="Book image"
         />
-
-        <div className="relative w-full mt-5 max-w-[120px] h-32 rounded-sm border overflow-hidden">
-          {imagePreview && (
-            <button
-              type="button"
-              onClick={() => {
-                setValue("image", null, { shouldValidate: true });
-                setImagePreview("");
-              }}
-              className="absolute top-1 right-1 z-20 p-1 bg-white/80 hover:bg-white rounded-full shadow"
-              aria-label="Remove image">
-              <X className="size-4 text-red-600" />
-            </button>
-          )}
-
-          {imagePreview ? (
-            <Image
-              src={imagePreview}
-              alt="Book cover preview"
-              fill
-              className="object-contain p-1"
-            />
-          ) : (
-            <p className="flex h-full items-center justify-center text-xs text-gray-500 text-center px-2">
-              No image uploaded yet
-            </p>
-          )}
-        </div>
+        <FormImagePreview
+          src={imagePreview ?? ""}
+          onRemove={() => {
+            setValue("image", null, { shouldValidate: true });
+            setImagePreview("");
+          }}
+        />
 
         <FormTextarea
           control={control}
