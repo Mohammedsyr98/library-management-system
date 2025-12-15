@@ -176,7 +176,24 @@ export const editBook = async ({
 };
 
 export const deleteBook = async ({ bookId }: { bookId: BookRow["id"] }) => {
-  const { error } = await supabase.from("books").delete().eq("id", bookId);
-  if (error) throw { message: error.message } as IErrorResponse;
-  return { message: "Book deleted successfully" };
+  const token = (await supabase.auth.getSession()).data.session?.access_token;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/delete-book`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ bookId }),
+    }
+  );
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw { message: data.message || "Delete failed." };
+  }
+
+  return data;
 };
