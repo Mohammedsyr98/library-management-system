@@ -20,7 +20,8 @@ const AllBooks = async ({
     .or(`title.ilike.%${search}%,author.ilike.%${search}%,genre.cs.{${search}}`)
     .order("created_at", { ascending: false })
     .range(from, to);
-
+  console.log(pageNumber);
+  console.log(count);
   return (
     <div>
       <Suspense fallback={<div></div>}>

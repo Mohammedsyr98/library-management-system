@@ -77,6 +77,9 @@ export const updateUserRole = async ({
 };
 
 export const deleteUser = async ({ userId }: { userId: string }) => {
+  // const { error } = await supabase.rpc("", {
+  //   book_id: bookId,
+  // });
   const token = (await supabase.auth.getSession()).data.session?.access_token;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/bright-worker`,
@@ -126,6 +129,7 @@ export const addBook = async ({
         summary: BookFormData.summary,
         image: data.path,
         total_books: BookFormData.total_books,
+        available_books: BookFormData.total_books,
       },
     ])
     .select();
@@ -177,6 +181,25 @@ export const editBook = async ({
 
 export const deleteBook = async ({ bookId }: { bookId: BookRow["id"] }) => {
   const { error } = await supabase.from("books").delete().eq("id", bookId);
-  if (error) throw { message: error.message } as IErrorResponse;
+
+  if (error) {
+    throw { message: error.message || "Delete failed." };
+  }
+
   return { message: "Book deleted successfully" };
+};
+
+/* -- Book borrows -- */
+
+export const updateBorrowStatus = async ({
+  borrowId,
+  newStatus,
+}: UpdateBorrowStatusParams) => {
+  const { error } = await supabase
+    .from("borrow_requests")
+    .update({ borrow_status: newStatus })
+    .eq("id", borrowId)
+    .select();
+  if (error) throw { message: error.message } as IErrorResponse;
+  return { message: "Borrow request status updated successfully" };
 };
