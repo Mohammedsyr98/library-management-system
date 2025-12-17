@@ -17,13 +17,7 @@ const UsersDataTable = ({
   total,
   page,
   limit,
-}: {
-  data: Database["public"]["Tables"]["users"]["Row"][];
-  currentUserId: string;
-  total: number;
-  page: number;
-  limit: number;
-}) => {
+}: ResourceTableProps<IUser>) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
 

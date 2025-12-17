@@ -1,69 +1,73 @@
+"use client";
 import Image from "next/image";
 import logo from "@/public/images/logo.png";
 import { useForm } from "react-hook-form";
-import FormInput from "./form-components/FormInput";
-import { signUpSchema } from "@/validations/validations";
+import FormInput from "../form-components/FormInput";
+import { signInSchema } from "@/validations/validations";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSignUp } from "@/hooks/useAuth";
-import { Button } from "./ui/Button";
-import { useToast } from "../hooks/useToast";
+import { useSignIn } from "@/hooks/useAuth";
+import { supabase } from "@/lib/supabaseClient";
+import { getCurrentUser } from "@/Services/services";
+import { Button } from "../ui/Button";
+import { useRouter } from "next/navigation";
+import { useToast } from "../../hooks/useToast";
 
-const SignUpForm = ({
+const SignInForm = ({
   setFormStep,
 }: {
   setFormStep: (value: string) => void;
 }) => {
+  const router = useRouter();
+  const { showToast } = useToast();
+
   const {
     control,
     handleSubmit,
+
     formState: { errors },
-  } = useForm<SignUpFormData>({
-    resolver: yupResolver(signUpSchema),
+  } = useForm<SignInFormData>({
+    resolver: yupResolver(signInSchema),
   });
+  const { mutate: signIn, isPending } = useSignIn();
+  const onSubmit = async (data: SignInFormData) => {
+    signIn(data, {
+      onSuccess: async () => {
+        const userRow = await getCurrentUser();
 
-  const { mutate: signUp, isPending } = useSignUp();
-  const { showToast } = useToast();
+        if (userRow.error) {
+          showToast(userRow.error, "error");
+          await supabase.auth.signOut();
+        } else {
+          showToast(
+            `Welcome ${userRow.data?.full_name}, you have logged in successfully!`,
+            "success"
+          );
 
-  const onSubmit = (data: SignUpFormData) => {
-    signUp(data, {
-      onSuccess: () => {
-        showToast(
-          "Account created successfully. Please wait for admin approval to activate your account.",
-          "success"
-        );
-
-        // redirect or do something
+          router.push(
+            userRow.data?.role === "ADMIN" ? "/dashboard/home" : "/home-page"
+          );
+        }
       },
       onError: (error: { message: string }) => {
         showToast(error.message, "error");
-        console.log(error);
       },
     });
   };
-
   return (
     <>
-      <main className="bg-[#12141D] m-20 rounded-[20px] shadow-[0_4px_6px_rgba(0,0,0,0.2)]">
+      <main className="bg-[#12141D] rounded-[20px] shadow-[0_4px_6px_rgba(0,0,0,0.2)]">
         <div className="p-10 text-white ">
           <Image src={logo} alt="BookWise logo" width={150} height={50} />
 
           <h1 className="mt-8 text-[28px] font-semibold">
-            Create Your Library Account
+            Welcome Back to the BookWise
           </h1>
 
           <p className="text-[18px] text-[#D6E0FF] mt-2">
-            Please complete all fields and upload a valid university ID to gain
-            access to the library.
+            Access the vast collection of resources, and stay updated
           </p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-7 space-y-5">
-            <FormInput
-              control={control}
-              name="full_name"
-              label="Full Name"
-              placeholder="Enter your full name"
-              errors={errors}
-            />
             <FormInput
               control={control}
               name="email"
@@ -73,14 +77,7 @@ const SignUpForm = ({
               className="mt-8"
               errors={errors}
             />
-            <FormInput
-              control={control}
-              name="university_id"
-              label="University ID Number"
-              placeholder="Enter your university ID"
-              className="mt-8"
-              errors={errors}
-            />
+
             <FormInput
               control={control}
               name="password"
@@ -92,8 +89,8 @@ const SignUpForm = ({
             />
 
             <Button
-              label="Sign up"
-              labelWhenPending="Signing Up..."
+              label="Sign in"
+              labelWhenPending="Signing In..."
               variant="lightOrange"
               isPending={isPending}
             />
@@ -101,11 +98,11 @@ const SignUpForm = ({
 
           {/* Login link */}
           <p className="flex items-center justify-center gap-1 font-medium mt-9 text-center">
-            Have an account already?
+            Don’t have an account already?
             <button
-              onClick={() => setFormStep("login")}
+              onClick={() => setFormStep("sign-up")}
               className="text-[#E7C9A5] hover:underline">
-              Login
+              Register here
             </button>
           </p>
         </div>
@@ -114,4 +111,4 @@ const SignUpForm = ({
   );
 };
 
-export default SignUpForm;
+export default SignInForm;

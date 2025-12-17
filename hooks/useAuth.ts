@@ -1,4 +1,5 @@
 import { getCurrentUser, signIn, signOut, signUp } from "@/Services/services";
+import { AuthResponse } from "@supabase/supabase-js";
 import {
   useMutation,
   UseMutationResult,
@@ -7,21 +8,21 @@ import {
 } from "@tanstack/react-query";
 
 export const useSignIn = (): UseMutationResult<
-  IResponse,
+  AuthResponse["data"],
   IErrorResponse,
   SignInFormData
 > => {
-  return useMutation<IResponse, IErrorResponse, SignInFormData>({
+  return useMutation<AuthResponse["data"], IErrorResponse, SignInFormData>({
     mutationFn: (data) => signIn(data),
   });
 };
 
 export const useSignUp = (): UseMutationResult<
-  IResponse,
+  AuthResponse["data"],
   IErrorResponse,
   SignUpFormData
 > => {
-  return useMutation<IResponse, IErrorResponse, SignUpFormData>({
+  return useMutation<AuthResponse["data"], IErrorResponse, SignUpFormData>({
     mutationFn: (data) => signUp(data),
   });
 };

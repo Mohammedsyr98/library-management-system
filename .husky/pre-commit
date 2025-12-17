@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
+# Block commit if linting or TS errors exist
 
-
+# Run lint-staged (ESLint)
+npx lint-staged || exit 1
 
 # Run TypeScript check
 npm run check || exit 1
