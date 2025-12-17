@@ -3,7 +3,6 @@ import {
   updateAccountRequest,
   updateUserRole,
 } from "@/services/services";
-import { Database } from "@/type/database.types";
 import { User } from "@supabase/supabase-js";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 

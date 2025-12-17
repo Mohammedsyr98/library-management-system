@@ -4,20 +4,20 @@ import { supabase } from "@/lib/supabaseClient";
 export const signIn = async (data: SignInFormData) => {
   const { email, password } = data;
 
-  const { data: userData, error } = await supabase.auth.signInWithPassword({
+  const { data: authData, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
   if (error) throw { message: error.message } as IErrorResponse;
 
-  return userData as IResponse;
+  return authData;
 };
 
 export const signUp = async (data: SignUpFormData) => {
   const { email, password, university_id, full_name } = data;
 
-  const { data: userData, error } = await supabase.auth.signUp({
+  const { data: authData, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -27,12 +27,12 @@ export const signUp = async (data: SignUpFormData) => {
       },
     },
   });
-  const userId = userData.user?.id;
+  const userId = authData.user?.id;
 
   if (error) throw { message: error.message } as IErrorResponse;
   if (!userId) throw new Error("User ID not found after signup");
   if (error) throw error;
-  return userData as IResponse;
+  return authData;
 };
 
 export const getCurrentUser = async () => {
@@ -41,7 +41,7 @@ export const getCurrentUser = async () => {
   if (error) throw { message: error.message } as IErrorResponse;
 
   if (error) throw error;
-  return userData as IResponse;
+  return userData;
 };
 export const signOut = async () => {
   const { error } = await supabase.auth.signOut();
@@ -72,7 +72,7 @@ export const updateUserRole = async ({
   if (!data || data.length === 0) {
     throw { message: "Update failed. No rows were updated." } as IErrorResponse;
   }
-  return data as IResponse["data"][];
+  return data;
 };
 export const updateAccountRequest = async ({
   userId,
