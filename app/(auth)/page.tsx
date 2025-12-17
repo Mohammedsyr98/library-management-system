@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import libraryImg from "@/public/images/library.jpg";
-import SignUpForm from "@/components/SignUpForm";
+import SignUpForm from "@/components/auth/SignUpForm";
 import SignInForm from "@/components/auth/SignInForm";
 
 const formVariants = {

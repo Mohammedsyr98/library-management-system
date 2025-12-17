@@ -1,12 +1,12 @@
 import Image from "next/image";
 import logo from "@/public/images/logo.png";
 import { useForm } from "react-hook-form";
-import FormInput from "./form-components/FormInput";
+import FormInput from "../form-components/FormInput";
 import { signUpSchema } from "@/validations/validations";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSignUp } from "@/hooks/useAuth";
-import { Button } from "./ui/Button";
-import { useToast } from "../hooks/useToast";
+import { Button } from "../ui/Button";
+import { useToast } from "../../hooks/useToast";
 
 const SignUpForm = ({
   setFormStep,

@@ -7,7 +7,7 @@ import { signInSchema } from "@/validations/validations";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSignIn } from "@/hooks/useAuth";
 import { supabase } from "@/lib/supabaseClient";
-import { getCurrentUser } from "@/services/services";
+import { getCurrentUser } from "@/Services/services";
 import { Button } from "../ui/Button";
 import { useRouter } from "next/navigation";
 import { useToast } from "../../hooks/useToast";

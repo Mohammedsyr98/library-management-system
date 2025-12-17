@@ -2,7 +2,7 @@ import {
   deleteUser,
   updateAccountRequest,
   updateUserRole,
-} from "@/services/services";
+} from "@/Services/services";
 import { User } from "@supabase/supabase-js";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 
