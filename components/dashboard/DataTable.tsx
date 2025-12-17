@@ -160,7 +160,7 @@ const DataTable = <T,>({
         {/* Next */}
         <button
           className="px-4 py-2 border rounded disabled:opacity-40"
-          disabled={page === pageCount}
+          disabled={pageCount === 0 || page === pageCount}
           onClick={() => {
             const params = new URLSearchParams(searchParams.toString());
             params.set("page", String(page + 1));

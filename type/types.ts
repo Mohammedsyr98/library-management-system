@@ -52,4 +52,13 @@ declare global {
     borrowId: Database["public"]["Tables"]["borrow_requests"]["Row"]["id"];
     newStatus: Database["public"]["Enums"]["borrow_status_enum"];
   }
+
+  interface AccountRequestDecision {
+    userId: IUser["id"];
+    action: "Approve" | "Reject";
+  }
+  interface UpdateAccountRequestPayload {
+    userId: IUser["id"];
+    action: Exclude<Database["public"]["Enums"]["status"], "PENDING">;
+  }
 }
