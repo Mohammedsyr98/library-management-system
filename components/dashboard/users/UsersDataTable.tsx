@@ -1,12 +1,6 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import DataTable from "../DataTable";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { AiOutlineCheck } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { useDeleteUser, useUpdateUserRole } from "@/hooks/useUsers";
 import { useToast } from "@/hooks/useToast";

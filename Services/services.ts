@@ -75,11 +75,29 @@ export const updateUserRole = async ({
   }
   return data as IResponse["data"][];
 };
+export const updateAccountRequest = async ({
+  userId,
+  action,
+}: UpdateAccountRequestPayload) => {
+  const { data, error } = await supabase
+    .from("users")
+    .update({ status: action })
+    .eq("id", userId)
+    .select();
+
+  if (error) throw { message: error.message } as IErrorResponse;
+  if (!data || data.length === 0) {
+    throw { message: "Update failed. No rows were updated." } as IErrorResponse;
+  }
+  return {
+    message:
+      action === "APPROVED"
+        ? "Account approved and access granted."
+        : "Account request rejected.",
+  };
+};
 
 export const deleteUser = async ({ userId }: { userId: string }) => {
-  // const { error } = await supabase.rpc("", {
-  //   book_id: bookId,
-  // });
   const token = (await supabase.auth.getSession()).data.session?.access_token;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/bright-worker`,

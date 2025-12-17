@@ -7,7 +7,8 @@ type ColorVariants =
   | "red"
   | "gray"
   | "brand1"
-  | "white";
+  | "white"
+  | "green";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
@@ -34,6 +35,7 @@ export const Button = ({
     gray: clsx("bg-gray-200 text-black hover:bg-gray-300"),
     brand1: clsx("bg-brand1 text-white hover:bg-[#1f2e70]"),
     white: clsx("bg-white text-black border border-gray-300 hover:bg-gray-100"),
+    green: clsx("bg-[#4C7B62] text-white hover:bg-[#3f6652]"),
   };
 
   return (
