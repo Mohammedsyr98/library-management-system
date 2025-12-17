@@ -77,6 +77,9 @@ export const updateUserRole = async ({
 };
 
 export const deleteUser = async ({ userId }: { userId: string }) => {
+  // const { error } = await supabase.rpc("", {
+  //   book_id: bookId,
+  // });
   const token = (await supabase.auth.getSession()).data.session?.access_token;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/bright-worker`,
@@ -177,26 +180,13 @@ export const editBook = async ({
 };
 
 export const deleteBook = async ({ bookId }: { bookId: BookRow["id"] }) => {
-  const token = (await supabase.auth.getSession()).data.session?.access_token;
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/delete-book`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ bookId }),
-    }
-  );
+  const { error } = await supabase.from("books").delete().eq("id", bookId);
 
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw { message: data.message || "Delete failed." };
+  if (error) {
+    throw { message: error.message || "Delete failed." };
   }
 
-  return data;
+  return { message: "Book deleted successfully" };
 };
 
 /* -- Book borrows -- */
