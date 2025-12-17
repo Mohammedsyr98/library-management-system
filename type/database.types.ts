@@ -17,38 +17,89 @@ export type Database = {
       books: {
         Row: {
           author: string;
+          available_books: number;
           created_at: string;
-          genre: Json;
+          genre: string[];
           id: number;
           image: string | null;
-          title: string;
           summary: string;
+          title: string;
           total_books: number;
           updated_at: string;
         };
         Insert: {
           author?: string;
+          available_books: number;
           created_at?: string;
-          genre?: Json;
+          genre?: string[];
           id?: number;
           image?: string | null;
+          summary?: string;
           title?: string;
-          summary: string;
-          total_books: number;
+          total_books?: number;
           updated_at?: string;
         };
         Update: {
           author?: string;
+          available_books?: number;
           created_at?: string;
-          genre?: Json;
+          genre?: string[];
           id?: number;
           image?: string | null;
+          summary?: string;
           title?: string;
-          summary: string;
-          total_books: number;
+          total_books?: number;
           updated_at?: string;
         };
         Relationships: [];
+      };
+      borrow_requests: {
+        Row: {
+          book_id: number | null;
+          borrow_status: Database["public"]["Enums"]["borrow_status_enum"];
+          borrowed_at: string;
+          due_date: string;
+          id: number;
+          returned_at: string | null;
+          updated_at: string;
+          user_id: string | null;
+        };
+        Insert: {
+          book_id?: number | null;
+          borrow_status?: Database["public"]["Enums"]["borrow_status_enum"];
+          borrowed_at?: string;
+          due_date: string;
+          id?: number;
+          returned_at?: string | null;
+          updated_at?: string;
+          user_id?: string | null;
+        };
+        Update: {
+          book_id?: number | null;
+          borrow_status?: Database["public"]["Enums"]["borrow_status_enum"];
+          borrowed_at?: string;
+          due_date?: string;
+          id?: number;
+          returned_at?: string | null;
+          updated_at?: string;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "borrow_book_requests_book_id_fkey";
+            columns: ["book_id"];
+            isOneToOne: false;
+            referencedRelation: "books";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "borrow_requests_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       users: {
         Row: {
@@ -91,6 +142,7 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      delete_book_safe: { Args: { book_id: number }; Returns: undefined };
       get_current_user: {
         Args: never;
         Returns: {
@@ -99,9 +151,30 @@ export type Database = {
           status?: string;
         };
       };
+      search_borrow_requests: {
+        Args: {
+          limit_count: number;
+          offset_count: number;
+          search_text: string;
+        };
+        Returns: {
+          book_id: number;
+          book_image: string;
+          book_title: string;
+          borrow_status: Database["public"]["Enums"]["borrow_status_enum"];
+          borrowed_at: string;
+          due_date: string;
+          id: number;
+          returned_at: string;
+          user_email: string;
+          user_full_name: string;
+          user_id: string;
+          total_count: number;
+        }[];
+      };
     };
     Enums: {
-      borrow_status: "BORROWED" | "RETURNED";
+      borrow_status_enum: "borrowed" | "returned" | "late_return";
       role: "USER" | "ADMIN";
       status: "PENDING" | "APPROVED" | "REJECTED";
     };
@@ -234,7 +307,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      borrow_status: ["BORROWED", "RETURNED"],
+      borrow_status_enum: ["borrowed", "returned", "late_return"],
       role: ["USER", "ADMIN"],
       status: ["PENDING", "APPROVED", "REJECTED"],
     },

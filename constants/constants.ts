@@ -19,7 +19,7 @@ export const navLinks = [
   {
     label: "All Books",
     icon: BookIcon,
-    path: "/dashboard/all-books",
+    path: "/dashboard/books",
   },
   {
     label: "Borrow Requests",
@@ -34,3 +34,17 @@ export const navLinks = [
 ];
 
 export const ROLES = ["ADMIN", "USER"] as Database["public"]["Enums"]["role"][];
+export const BORROW_STATUS_LABELS: Record<
+  Database["public"]["Enums"]["borrow_status_enum"],
+  string
+> = {
+  borrowed: "Borrowed",
+  returned: "Returned",
+  late_return: "Late return",
+};
+export const BORROW_STATUS_BY_LABEL: Record<
+  string,
+  Database["public"]["Enums"]["borrow_status_enum"]
+> = Object.fromEntries(
+  Object.entries(BORROW_STATUS_LABELS).map(([k, v]) => [v, k])
+) as Record<string, Database["public"]["Enums"]["borrow_status_enum"]>;

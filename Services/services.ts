@@ -126,6 +126,7 @@ export const addBook = async ({
         summary: BookFormData.summary,
         image: data.path,
         total_books: BookFormData.total_books,
+        available_books: BookFormData.total_books,
       },
     ])
     .select();
@@ -196,4 +197,19 @@ export const deleteBook = async ({ bookId }: { bookId: BookRow["id"] }) => {
   }
 
   return data;
+};
+
+/* -- Book borrows -- */
+
+export const updateBorrowStatus = async ({
+  borrowId,
+  newStatus,
+}: UpdateBorrowStatusParams) => {
+  const { error } = await supabase
+    .from("borrow_requests")
+    .update({ borrow_status: newStatus })
+    .eq("id", borrowId)
+    .select();
+  if (error) throw { message: error.message } as IErrorResponse;
+  return { message: "Borrow request status updated successfully" };
 };

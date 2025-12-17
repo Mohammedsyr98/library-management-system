@@ -13,7 +13,7 @@ import { AiOutlineFileSearch } from "react-icons/ai";
 interface DataTableProps<T> {
   data: T[];
   columns: ColumnDef<T>[];
-  Actions: React.ComponentType<{ row: T }>;
+  Actions?: React.ComponentType<{ row: T }>;
   total: number;
   page: number;
   limit: number;
@@ -84,7 +84,7 @@ const DataTable = <T,>({
                         )}
                   </th>
                 ))}
-                <th className="p-3 font-medium">Actions</th>
+                {Actions && <th className="p-3 font-medium">Actions</th>}
               </tr>
             ))}
           </thead>
@@ -101,9 +101,11 @@ const DataTable = <T,>({
                       )}
                     </td>
                   ))}
-                  <td className="p-3">
-                    <Actions row={row.original} />
-                  </td>
+                  {Actions && (
+                    <td className="p-3">
+                      <Actions row={row.original} />
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

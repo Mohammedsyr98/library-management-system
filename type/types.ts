@@ -43,6 +43,13 @@ declare global {
   }
 
   type BookRow = Database["public"]["Tables"]["books"]["Row"];
+  type BookRequestRow =
+    Database["public"]["Functions"]["search_borrow_requests"]["Returns"][number];
 
   type BookFormData = yup.InferType<typeof BookFormSchema>;
+
+  interface UpdateBorrowStatusParams {
+    borrowId: Database["public"]["Tables"]["borrow_requests"]["Row"]["id"];
+    newStatus: Database["public"]["Enums"]["borrow_status_enum"];
+  }
 }

@@ -1,4 +1,9 @@
-import { addBook, deleteBook, editBook } from "@/Services/services";
+import {
+  addBook,
+  deleteBook,
+  editBook,
+  updateBorrowStatus,
+} from "@/Services/services";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 
 export const useAddBook = (): UseMutationResult<
@@ -39,6 +44,21 @@ export const useUpdateBook = (): UseMutationResult<
   >({
     mutationFn: ({ BookFormData, bookId, imageKey }) =>
       editBook({ BookFormData, bookId, imageKey }),
+  });
+};
+
+export const useUpdateBorrowStatus = (): UseMutationResult<
+  { message: string },
+  IErrorResponse,
+  UpdateBorrowStatusParams
+> => {
+  return useMutation<
+    { message: string },
+    IErrorResponse,
+    UpdateBorrowStatusParams
+  >({
+    mutationFn: ({ newStatus, borrowId }) =>
+      updateBorrowStatus({ borrowId, newStatus }),
   });
 };
 
