@@ -1,5 +1,4 @@
 import { supabase } from "@/lib/supabaseClient";
-import { Database } from "@/type/database.types";
 
 /* -- Auth -- */
 export const signIn = async (data: SignInFormData) => {

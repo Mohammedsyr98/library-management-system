@@ -1,4 +1,4 @@
-import { getCurrentUser, signIn, signOut, signUp } from "@/Services/services";
+import { getCurrentUser, signIn, signOut, signUp } from "@/services/services";
 import {
   useMutation,
   UseMutationResult,

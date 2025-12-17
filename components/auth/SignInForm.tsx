@@ -2,15 +2,15 @@
 import Image from "next/image";
 import logo from "@/public/images/logo.png";
 import { useForm } from "react-hook-form";
-import FormInput from "./form-components/FormInput";
+import FormInput from "../form-components/FormInput";
 import { signInSchema } from "@/validations/validations";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSignIn } from "@/hooks/useAuth";
 import { supabase } from "@/lib/supabaseClient";
-import { getCurrentUser } from "@/Services/services";
-import { Button } from "./ui/Button";
+import { getCurrentUser } from "@/services/services";
+import { Button } from "../ui/Button";
 import { useRouter } from "next/navigation";
-import { useToast } from "../hooks/useToast";
+import { useToast } from "../../hooks/useToast";
 
 const SignInForm = ({
   setFormStep,

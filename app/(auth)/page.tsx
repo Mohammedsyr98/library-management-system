@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import libraryImg from "@/public/images/library.jpg";
 import SignUpForm from "@/components/SignUpForm";
-import SignInForm from "@/components/SignInForm";
+import SignInForm from "@/components/auth/SignInForm";
 
 const formVariants = {
   initial: { opacity: 0, x: 50 },
