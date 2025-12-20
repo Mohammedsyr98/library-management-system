@@ -143,6 +143,20 @@ export type Database = {
     };
     Functions: {
       delete_book_safe: { Args: { book_id: number }; Returns: undefined };
+      get_dashboard_insights: {
+        Args: never;
+        Returns: {
+          stats: {
+            label: string;
+            value: number;
+          }[];
+          recent: {
+            borrow_requests: BookRequestRow[];
+            account_requests: IUser[];
+            recently_added_books: BookRow[];
+          };
+        };
+      };
       get_current_user: {
         Args: never;
         Returns: {
@@ -170,6 +184,8 @@ export type Database = {
           user_full_name: string;
           user_id: string;
           total_count: number;
+          author: string;
+          book_genre: string[];
         }[];
       };
     };
