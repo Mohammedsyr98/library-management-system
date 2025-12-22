@@ -11,6 +11,7 @@ import { useDeleteBook } from "@/hooks/useBooks";
 import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/navigation";
 import { getBookImageUrl } from "@/utils";
+import { invalidate } from "@/Services/server/actions";
 
 const BooksDataTable = ({
   data,
@@ -30,7 +31,8 @@ const BooksDataTable = ({
     deleteBook(
       { bookId },
       {
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
+          await invalidate("books");
           setIsOpen(false);
           showToast(data.message, "success");
 

@@ -1,4 +1,9 @@
-import { getCurrentUser, signIn, signOut, signUp } from "@/Services/services";
+import {
+  getCurrentUser,
+  signIn,
+  signOut,
+  signUp,
+} from "@/Services/client/services";
 import { AuthResponse } from "@supabase/supabase-js";
 import {
   useMutation,

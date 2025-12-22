@@ -3,7 +3,7 @@ import {
   deleteBook,
   editBook,
   updateBorrowStatus,
-} from "@/Services/services";
+} from "@/Services/client/services";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 
 export const useAddBook = (): UseMutationResult<

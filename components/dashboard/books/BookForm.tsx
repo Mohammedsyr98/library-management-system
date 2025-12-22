@@ -6,6 +6,7 @@ import FormTextarea from "@/components/form-components/FormTextarea";
 import { Button } from "@/components/ui/Button";
 import { useAddBook, useUpdateBook } from "@/hooks/useBooks";
 import { useToast } from "@/hooks/useToast";
+import { invalidate } from "@/Services/server/actions";
 import { getBookImageUrl, urlToObject } from "@/utils";
 import { BookFormSchema } from "@/validations/validations";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -47,11 +48,11 @@ const BookForm = ({ editBook }: { editBook?: BookRow }) => {
       addBook(
         { BookFormData: data },
         {
-          onSuccess: (data) => {
+          onSuccess: async (data) => {
+            await invalidate("books");
             showToast(data.message, "success");
             reset();
             setImagePreview("");
-            router.refresh();
           },
           onError: (error) => {
             showToast(error.message, "error");
@@ -63,9 +64,9 @@ const BookForm = ({ editBook }: { editBook?: BookRow }) => {
       updateBook(
         { BookFormData: data, bookId: editBook.id, imageKey },
         {
-          onSuccess: (data) => {
+          onSuccess: async (data) => {
+            await invalidate("books");
             showToast(data.message, "success");
-            router.refresh();
           },
           onError: (error) => {
             showToast(error.message, "error");

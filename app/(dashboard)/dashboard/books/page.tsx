@@ -1,27 +1,20 @@
 import BooksDataTable from "@/components/dashboard/books/BooksDataTable";
 import CreateBookButton from "@/components/dashboard/books/CreateBookButton";
 import PageHead from "@/components/dashboard/PageHead";
+import { getBooks } from "@/Services/server/services";
 import { getPaginationInfo } from "@/utils";
-import { createClient } from "@/utils/supabase/supabase-server";
+
 import { Suspense } from "react";
 
 const AllBooks = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
   const { search = "", page } = await searchParams;
   const { from, to, page: pageNumber, limit } = getPaginationInfo(String(page));
+  const { data: books, count } = await getBooks(search, from, to);
 
-  const supabase = await createClient();
-  const { data: books, count } = await supabase
-    .from("books")
-    .select("*", { count: "exact" })
-    .or(`title.ilike.%${search}%,author.ilike.%${search}%,genre.cs.{${search}}`)
-    .order("created_at", { ascending: false })
-    .range(from, to);
-  console.log(pageNumber);
-  console.log(count);
   return (
     <div>
       <Suspense fallback={<div></div>}>
