@@ -15,9 +15,8 @@ import { unstable_cache } from "next/cache";
  * to ensure all users see fresh data.
  */
 
-const supabase = await createClient();
-
 export const getBooks = async (search: string, from: number, to: number) => {
+  const supabase = await createClient();
   if (search) {
     return supabase
       .from("books")
@@ -50,6 +49,7 @@ export const getBorrowRequests = async (
   from: number,
   to: number
 ) => {
+  const supabase = await createClient();
   if (search) {
     return supabase.rpc("search_borrow_requests", {
       search_text: Array.isArray(search) ? search[0] : search || "",
@@ -74,6 +74,7 @@ export const getBorrowRequests = async (
   return getCachedRequests(from, to);
 };
 export const getAllUsers = async (search: string, from: number, to: number) => {
+  const supabase = await createClient();
   if (search) {
     return supabase
       .from("users")
@@ -104,7 +105,9 @@ export const getAccountRequests = async (
   from: number,
   to: number
 ) => {
+  const supabase = await createClient();
   if (search) {
+    const supabase = await createClient();
     return supabase
       .from("users")
       .select("*", { count: "exact" })
@@ -131,6 +134,7 @@ export const getAccountRequests = async (
   return getCachedAccountRequests(from, to);
 };
 export const getDashboardInsights = async () => {
+  const supabase = await createClient();
   const getCachedDashboardInsights = unstable_cache(
     async () => {
       return supabase.rpc("get_dashboard_insights");
