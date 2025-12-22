@@ -2,20 +2,21 @@ import AccountRequests from "@/components/dashboard/home/AccountRequests";
 import BorrowRequests from "@/components/dashboard/home/BorrowRequests";
 import RecentBooks from "@/components/dashboard/home/RecentBooks";
 import StatCard from "@/components/dashboard/home/StatCard";
+import { getDashboardInsights } from "@/Services/server/services";
 import { createClient } from "@/utils/supabase/supabase-server";
 
 const Home = async () => {
   const supabase = await createClient();
-  const { data: userData } = await supabase.rpc("get_current_user");
-  const { data: dashboardInsights } = await supabase.rpc(
-    "get_dashboard_insights"
-  );
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: dashboardInsights } = await getDashboardInsights();
 
   return (
     <div className="p-5">
       <div className="mb-10">
         <p className="text-2xl font-semibold">
-          Welcome, {userData?.data?.full_name}
+          Welcome, {user?.user_metadata?.full_name}
         </p>
         <p className="text-[#8D8D8D]">
           Here’s an overview of today’s library activity

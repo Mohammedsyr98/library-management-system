@@ -7,6 +7,7 @@ import { useState } from "react";
 import { X } from "lucide-react";
 import AccountRequestActionModal from "./AccountRequestActionModal";
 import { useUpdateAccountStatus } from "@/hooks/useUsers";
+import { invalidate } from "@/Services/server/actions";
 
 const AccountRequestsDataTable = ({
   data,
@@ -32,7 +33,8 @@ const AccountRequestsDataTable = ({
           userId: selectedRequest.userId,
         },
         {
-          onSuccess: (data) => {
+          onSuccess: async (data) => {
+            await invalidate("account-requests");
             showToast(data.message, "success");
             setIsOpen(false);
             router.refresh();

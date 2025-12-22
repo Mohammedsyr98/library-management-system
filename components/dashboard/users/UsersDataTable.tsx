@@ -5,11 +5,11 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { useDeleteUser, useUpdateUserRole } from "@/hooks/useUsers";
 import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/navigation";
-import { Database } from "@/type/database.types";
 import { useState } from "react";
 import ConfirmDeleteUserModal from "./ConfirmDeleteUserModal";
 import { PopoverMenu } from "@/components/PopoverMenu";
 import { ROLES } from "@/constants/constants";
+import { invalidate } from "@/Services/server/actions";
 
 const UsersDataTable = ({
   data,
@@ -35,7 +35,8 @@ const UsersDataTable = ({
     updateUserRole(
       { newRole, userId },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
+          await invalidate("users");
           showToast("User role updated successfully.", "success");
           setIsOpen(false);
           router.refresh();

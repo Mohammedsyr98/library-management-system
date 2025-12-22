@@ -11,6 +11,7 @@ import DataTable from "../DataTable";
 import { useUpdateBorrowStatus } from "@/hooks/useBooks";
 import { useToast } from "@/hooks/useToast";
 import { useRouter } from "next/navigation";
+import { invalidate } from "@/Services/server/actions";
 
 const RequestsDataTable = ({
   data,
@@ -29,7 +30,8 @@ const RequestsDataTable = ({
     updateBorrowStatus(
       { borrowId, newStatus },
       {
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
+          await invalidate("borrows");
           showToast(data.message, "success");
           router.refresh();
         },

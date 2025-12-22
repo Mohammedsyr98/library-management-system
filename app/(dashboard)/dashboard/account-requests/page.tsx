@@ -1,26 +1,18 @@
 import AccountRequestsDataTable from "@/components/dashboard/account-request/AccountRequestsDataTable";
 import PageHead from "@/components/dashboard/PageHead";
+import { getAccountRequests } from "@/Services/server/services";
 import { getPaginationInfo } from "@/utils";
-import { createClient } from "@/utils/supabase/supabase-server";
 import { Suspense } from "react";
 
 const AccountRequest = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
   const { search = "", page } = await searchParams;
   const { from, to, page: pageNumber, limit } = getPaginationInfo(String(page));
+  const { data: users, count } = await getAccountRequests(search, from, to);
 
-  const supabase = await createClient();
-
-  const { data: users, count } = await supabase
-    .from("users")
-    .select("*", { count: "exact" })
-    .filter("status", "eq", "PENDING")
-    .or(`full_name.ilike.%${search}%,email.ilike.%${search}%`)
-    .order("created_at", { ascending: false })
-    .range(from, to);
   return (
     <div>
       <Suspense fallback={<div></div>}>
