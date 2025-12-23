@@ -9,7 +9,6 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
     .select("*")
     .eq("id", Number(bookId));
 
-  console.log(book);
   return (
     <div className="mt-[120px] px-6">
       {book?.[0] && <BookForm editBook={book?.[0]} />}

@@ -6,4 +6,3 @@ import config from "@/lib/config";
 const sql = neon(config.env.databaseUrl!);
 
 export const db = drizzle(sql);
-console.log("DB URL:", config.env.databaseUrl);
