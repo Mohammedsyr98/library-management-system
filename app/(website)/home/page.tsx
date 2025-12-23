@@ -1,7 +1,9 @@
-import React from "react";
+import { getBooks } from "@/Services/server/services";
 
-const Home = () => {
-  return <div>Home</div>;
+const Home = async () => {
+  const { data: books } = await getBooks("", 0, 7);
+  console.log(books);
+  return <div></div>;
 };
 
 export default Home;
