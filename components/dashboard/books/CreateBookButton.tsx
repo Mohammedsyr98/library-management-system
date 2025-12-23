@@ -8,7 +8,7 @@ const CreateBookButton = () => {
   const router = useRouter();
   return (
     <Button
-      className="w-[180px]! h-10! justify-start!"
+      className="w-[180px]! h-10! justify-start! mt-0!"
       prefixIcon={<Plus className="text-white h-5 ml-1" />}
       variant="brand1"
       label="Create new book"
