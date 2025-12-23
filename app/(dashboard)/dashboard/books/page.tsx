@@ -18,7 +18,7 @@ const AllBooks = async ({
       <PageHead />
 
       <div className="bg-white mx-6 p-5 rounded-[14px] mt-10">
-        <div className="flex items-end mb-[23px] justify-between">
+        <div className="flex items-center mb-[23px] justify-between">
           <p className="text-[20px] font-semibold text-[#1E293B]">All Books</p>{" "}
           <CreateBookButton />
         </div>

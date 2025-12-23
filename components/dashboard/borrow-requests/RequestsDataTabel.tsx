@@ -65,7 +65,7 @@ const RequestsDataTable = ({
       cell: ({ row }) => (
         <div className="flex items-center gap-x-2 min-w-0">
           {" "}
-          <div className="border rounded-[7px] w-[34px] text-center p-1 font-semibold text-green-600">
+          <div className="border rounded-[7px] min-w-[34px] max-w-[34px] text-center p-1 font-semibold text-green-600">
             {row.original.user_full_name
               .split(" ")
               .map((n) => n[0])
