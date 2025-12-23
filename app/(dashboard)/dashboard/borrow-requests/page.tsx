@@ -2,7 +2,6 @@ import RequestsDataTable from "@/components/dashboard/borrow-requests/RequestsDa
 import PageHead from "@/components/dashboard/PageHead";
 import { getBorrowRequests } from "@/Services/server/services";
 import { getPaginationInfo } from "@/utils";
-import { Suspense } from "react";
 
 const BarrowRequests = async ({
   searchParams,
@@ -15,9 +14,7 @@ const BarrowRequests = async ({
 
   return (
     <div>
-      <Suspense fallback={<div></div>}>
-        <PageHead />
-      </Suspense>
+      <PageHead />
       <div className="bg-white mx-6 p-5 rounded-[14px] mt-10">
         <div className="flex items-end mb-[23px] justify-between">
           <p className="text-[20px] font-semibold text-[#1E293B]">
