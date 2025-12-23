@@ -3,7 +3,6 @@ import UsersDataTable from "@/components/dashboard/users/UsersDataTable";
 import { getAllUsers } from "@/Services/server/services";
 import { getPaginationInfo } from "@/utils";
 import { createClient } from "@/utils/supabase/supabase-server";
-import { Suspense } from "react";
 
 const AllUsers = async ({
   searchParams,
@@ -18,9 +17,7 @@ const AllUsers = async ({
 
   return (
     <div>
-      <Suspense fallback={<div></div>}>
-        <PageHead />
-      </Suspense>
+      <PageHead />
       <div className="bg-white mx-6 p-5 rounded-[14px] mt-10">
         <p className="text-[20px] font-semibold text-[#1E293B] mb-[23px]">
           All Users

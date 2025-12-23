@@ -1,5 +1,5 @@
 "use client";
-
+import { useTransition } from "react";
 import { getPaginationRange } from "@/utils";
 import {
   ColumnDef,
@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-table";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AiOutlineFileSearch } from "react-icons/ai";
+import { Oval } from "react-loader-spinner";
 
 interface DataTableProps<T> {
   data: T[];
@@ -29,9 +30,11 @@ const DataTable = <T,>({
 }: DataTableProps<T>) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
   const pageCount = Math.ceil(total / limit);
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,
@@ -50,9 +53,11 @@ const DataTable = <T,>({
           ? updater(table.getState().pagination)
           : updater;
 
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("page", String(next.pageIndex + 1));
-      router.push(`?${params.toString()}`);
+      startTransition(() => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("page", String(next.pageIndex + 1));
+        router.push(`?${params.toString()}`);
+      });
     },
   });
 
@@ -60,6 +65,11 @@ const DataTable = <T,>({
     <div className="space-y-6">
       {/* TABLE */}
       <div className="border relative border-gray-200 rounded-lg overflow-y-auto min-h-[62.9vh] max-h-[62.9vh] ">
+        {isPending && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50 backdrop-blur-[1px]">
+            <Oval color="#25388c" height={40} width={40} />
+          </div>
+        )}
         {data.length === 0 && (
           <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500">
             <AiOutlineFileSearch size={48} className="mb-2 text-gray-400" />
@@ -91,23 +101,25 @@ const DataTable = <T,>({
 
           {data.length > 0 && (
             <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id} className="border-t">
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="p-3 font-medium">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
+              {isPending
+                ? null
+                : table.getRowModel().rows.map((row) => (
+                    <tr key={row.id} className="border-t">
+                      {row.getVisibleCells().map((cell) => (
+                        <td key={cell.id} className="p-3 font-medium">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      ))}
+                      {Actions && (
+                        <td className="p-3">
+                          <Actions row={row.original} />
+                        </td>
                       )}
-                    </td>
+                    </tr>
                   ))}
-                  {Actions && (
-                    <td className="p-3">
-                      <Actions row={row.original} />
-                    </td>
-                  )}
-                </tr>
-              ))}
             </tbody>
           )}
         </table>
@@ -119,11 +131,7 @@ const DataTable = <T,>({
         <button
           className="px-4 py-2 border rounded disabled:opacity-40"
           disabled={page === 1}
-          onClick={() => {
-            const params = new URLSearchParams(searchParams.toString());
-            params.set("page", String(page - 1));
-            router.push(`?${params.toString()}`);
-          }}>
+          onClick={() => table.previousPage()}>
           Previous
         </button>
 
@@ -146,11 +154,7 @@ const DataTable = <T,>({
                     ? "bg-brand1 text-white border-brand1"
                     : "bg-white"
                 }`}
-                onClick={() => {
-                  const params = new URLSearchParams(searchParams.toString());
-                  params.set("page", String(item));
-                  router.push(`?${params.toString()}`);
-                }}>
+                onClick={() => table.setPageIndex(Number(item) - 1)}>
                 {item}
               </button>
             );
@@ -161,11 +165,7 @@ const DataTable = <T,>({
         <button
           className="px-4 py-2 border rounded disabled:opacity-40"
           disabled={pageCount === 0 || page === pageCount}
-          onClick={() => {
-            const params = new URLSearchParams(searchParams.toString());
-            params.set("page", String(page + 1));
-            router.push(`?${params.toString()}`);
-          }}>
+          onClick={() => table.nextPage()}>
           Next
         </button>
       </div>
