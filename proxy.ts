@@ -30,7 +30,7 @@ export async function proxy(request: NextRequest) {
     if (role === "ADMIN") {
       return NextResponse.redirect(new URL("/dashboard/home", request.url));
     } else if (role === "USER") {
-      return NextResponse.redirect(new URL("/home-page", request.url));
+      return NextResponse.redirect(new URL("/home", request.url));
     }
   }
 
