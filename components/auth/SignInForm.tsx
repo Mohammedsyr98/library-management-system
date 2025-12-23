@@ -6,8 +6,6 @@ import FormInput from "../form-components/FormInput";
 import { signInSchema } from "@/validations/validations";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSignIn } from "@/hooks/useAuth";
-import { supabase } from "@/lib/supabaseClient";
-import { getCurrentUser } from "@/Services/client/services";
 import { Button } from "../ui/Button";
 import { useRouter } from "next/navigation";
 import { useToast } from "../../hooks/useToast";
@@ -31,22 +29,9 @@ const SignInForm = ({
   const { mutate: signIn, isPending } = useSignIn();
   const onSubmit = async (data: SignInFormData) => {
     signIn(data, {
-      onSuccess: async () => {
-        const userRow = await getCurrentUser();
-
-        if (userRow.error) {
-          showToast(userRow.error, "error");
-          await supabase.auth.signOut();
-        } else {
-          showToast(
-            `Welcome ${userRow.data?.full_name}, you have logged in successfully!`,
-            "success"
-          );
-
-          router.push(
-            userRow.data?.role === "ADMIN" ? "/dashboard/home" : "/home-page"
-          );
-        }
+      onSuccess: () => {
+        showToast("Welcome back! You have logged in successfully.", "success");
+        router.refresh();
       },
       onError: (error: { message: string }) => {
         showToast(error.message, "error");

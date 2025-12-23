@@ -24,7 +24,7 @@ export async function proxy(request: NextRequest) {
   if (!role && !isPublic) {
     return NextResponse.redirect(new URL("/", request.url));
   }
-
+  console.log(role);
   // 🟩 If logged in → Role-based redirects
   if (pathname === "/") {
     if (role === "ADMIN") {

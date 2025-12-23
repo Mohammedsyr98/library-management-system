@@ -31,8 +31,6 @@ const SignUpForm = ({
           "Account created successfully. Please wait for admin approval to activate your account.",
           "success"
         );
-
-        // redirect or do something
       },
       onError: (error: { message: string }) => {
         showToast(error.message, "error");
