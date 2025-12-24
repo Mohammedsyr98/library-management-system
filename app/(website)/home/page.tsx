@@ -1,4 +1,4 @@
-import FeaturedBook from "@/components/website/home/FeaturedBook";
+import FeaturedBook from "@/components/website/FeaturedBook";
 import PopularBooks from "@/components/website/home/PopularBooks";
 import { getBooks } from "@/Services/server/services";
 

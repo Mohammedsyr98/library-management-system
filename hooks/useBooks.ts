@@ -1,5 +1,6 @@
 import {
   addBook,
+  borrowBook,
   deleteBook,
   editBook,
   updateBorrowStatus,
@@ -47,6 +48,15 @@ export const useUpdateBook = (): UseMutationResult<
   });
 };
 
+export const useBorrowBook = (): UseMutationResult<
+  { message: string },
+  IErrorResponse,
+  { book_id: number }
+> => {
+  return useMutation<{ message: string }, IErrorResponse, { book_id: number }>({
+    mutationFn: ({ book_id }) => borrowBook({ book_id }),
+  });
+};
 export const useUpdateBorrowStatus = (): UseMutationResult<
   { message: string },
   IErrorResponse,

@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import { invalidate } from "../server/actions";
 
 /* -- Auth -- */
 export const signIn = async (data: SignInFormData) => {
@@ -202,11 +203,20 @@ export const deleteBook = async ({ bookId }: { bookId: BookRow["id"] }) => {
   if (error) {
     throw { message: error.message || "Delete failed." };
   }
-
+  invalidate("books");
   return { message: "Book deleted successfully" };
 };
 
 /* -- Book borrows -- */
+export const borrowBook = async ({ book_id }: { book_id: number }) => {
+  const { error } = await supabase
+    .from("borrow_requests")
+    .insert({ book_id, borrow_status: "borrowed" });
+
+  if (error) throw { message: error.message } as IErrorResponse;
+  invalidate("books");
+  return { message: "Book borrowed successfully" };
+};
 
 export const updateBorrowStatus = async ({
   borrowId,

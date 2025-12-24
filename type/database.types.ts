@@ -68,7 +68,7 @@ export type Database = {
           book_id?: number | null;
           borrow_status?: Database["public"]["Enums"]["borrow_status_enum"];
           borrowed_at?: string;
-          due_date: string;
+          due_date?: string;
           id?: number;
           returned_at?: string | null;
           updated_at?: string;
