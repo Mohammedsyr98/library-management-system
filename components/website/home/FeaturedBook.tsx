@@ -48,7 +48,7 @@ const FeaturedBook = ({ book }: { book: BookRow | null }) => {
           </div>
 
           {/* Summary */}
-          <p className="mt-6 text-sm sm:text-base leading-relaxed">
+          <p className="mt-6 text-sm sm:text-base line-clamp-6 leading-relaxed">
             {book.summary}
           </p>
         </div>
@@ -66,7 +66,7 @@ const FeaturedBook = ({ book }: { book: BookRow | null }) => {
           alt={book.title}
           width={350}
           height={500}
-          className="w-full max-w-60 sm:max-w-[300px] lg:max-w-[350px] h-auto"
+          className="w-full max-w-60 sm:max-w-[300px] max-h-[500px] lg:max-w-[350px]"
         />
       </div>
     </section>
