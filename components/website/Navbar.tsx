@@ -58,12 +58,12 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+      className={`sticky top-0 z-50 w-full transition-all duration-300  ${
         hasScrolled
           ? "py-3 bg-[#0F172A]/80 backdrop-blur-md border-b border-white/10 shadow-lg"
           : "py-5 bg-transparent border-b border-transparent"
       }`}>
-      <div className="flex items-center justify-between px-5 md:px-10 lg:px-0">
+      <div className="flex items-center justify-between px-5 md:px-10 lg:px-24">
         {/* Logo */}
         <Link href="/home" className="flex items-center gap-x-2 shrink-0">
           <Image
