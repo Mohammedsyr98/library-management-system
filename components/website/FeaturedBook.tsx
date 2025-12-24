@@ -4,7 +4,7 @@ import BorrowButton from "./BorrowButton";
 
 const FeaturedBook = ({ book }: { book: BookRow | null }) => {
   if (!book) return null;
-
+  console.log(book.id);
   return (
     <section className="flex flex-col-reverse lg:flex-row h-full gap-10">
       {/* Content */}
@@ -55,7 +55,7 @@ const FeaturedBook = ({ book }: { book: BookRow | null }) => {
 
         {/* Action */}
         <div className="mt-8 lg:mt-0">
-          <BorrowButton />
+          <BorrowButton bookId={book.id} />
         </div>
       </div>
 
