@@ -1,7 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 
-export function getPaginationInfo(pageParam: string | undefined) {
-  const limit = 6;
+export function getPaginationInfo(pageParam: string | undefined, limit = 6) {
   const page = Number(pageParam) || 1;
   const from = (page - 1) * limit;
   const to = from + limit - 1;
