@@ -43,7 +43,7 @@ const Search = async ({
         <Suspense
           key={suspenseKey}
           fallback={
-            <div className="absolute z-10 flex items-center justify-center">
+            <div className="absolute z-10 flex items-center justify-center  mt-20  left-1/2 -translate-x-1/2">
               <ResultsLoadingSpinner />
             </div>
           }>
