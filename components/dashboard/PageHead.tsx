@@ -3,6 +3,7 @@ import Image from "next/image";
 import searchIcon from "@/public/images/searchIcon.png";
 import { useGetCurrentUser } from "@/hooks/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useDebouncedCallback } from "use-debounce";
 import { useCallback } from "react";
 
 const PageHead = () => {
@@ -16,16 +17,19 @@ const PageHead = () => {
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
       if (value) params.set(name, value);
-      else params.delete(name); // Clean up URL if search is empty
+      else params.delete(name);
       return params.toString();
     },
     [searchParams]
   );
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newQuery = createQueryString("search", e.target.value);
-    router.replace(`?${newQuery}`, { scroll: false });
-  };
+  const handleSearchChange = useDebouncedCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newQuery = createQueryString("search", e.target.value);
+      router.replace(`?${newQuery}`, { scroll: false });
+    },
+    1000
+  );
 
   return (
     <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 pt-16 md:pt-5">
