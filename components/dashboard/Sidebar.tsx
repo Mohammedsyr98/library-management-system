@@ -34,7 +34,7 @@ const Sidebar = () => {
       </div>
 
       {/* DESKTOP SIDEBAR */}
-      <aside className="hidden lg:flex flex-col w-72 sticky top-0 h-screen border-r bg-white">
+      <aside className="hidden lg:flex flex-col min-w-72 w-72 sticky top-0 h-screen border-r bg-white">
         <SidebarContent />
       </aside>
     </>
@@ -46,7 +46,7 @@ const SidebarContent = ({ closeMenu }: { closeMenu?: () => void }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { showToast } = useToast();
-  const { data: userData } = useGetCurrentUser();
+  const { data: userData, isLoading } = useGetCurrentUser();
   const { mutate: signOut, isPending: isSigningOut } = useSignOut();
 
   const fullName = userData?.data?.full_name || "User";
@@ -63,7 +63,7 @@ const SidebarContent = ({ closeMenu }: { closeMenu?: () => void }) => {
   };
 
   return (
-    <div className="flex flex-col justify-between h-full p-6">
+    <div className="flex flex-col justify-between h-full p-6 ">
       <div>
         <div className="flex items-center border-b border-dotted pb-6 mb-6">
           <Image src={logo} width={37} height={37} alt="Book-wise" />
@@ -90,22 +90,45 @@ const SidebarContent = ({ closeMenu }: { closeMenu?: () => void }) => {
           })}
         </nav>
       </div>
-
-      <div className="mt-auto flex items-center border border-slate-100 rounded-full p-2 bg-slate-50/50">
-        <ProfileInitials userFullName={fullName} />
-        <div className="ml-3 flex-1 overflow-hidden">
-          <p className="text-sm font-semibold truncate">{fullName}</p>
-          <p className="text-xs text-slate-500 truncate">{email}</p>
-        </div>
-        <button
-          onClick={handleSignOut}
-          disabled={isSigningOut}
-          className="p-2 hover:bg-red-50 rounded-full transition-colors">
-          <Image src={LogOutIcon} alt="logout" width={20} height={20} />
-        </button>
+      <div className="mt-auto h-[60px] flex items-center w-full">
+        {" "}
+        {isLoading ? (
+          <ProfileSkeleton />
+        ) : (
+          <div className="mt-auto flex items-center border border-slate-100 rounded-full p-2 bg-slate-50/50 w-full min-w-[55px] max-w-60">
+            <ProfileInitials userFullName={fullName || "User"} />
+            <div className="ml-3 flex-1 overflow-hidden">
+              <p className="text-sm font-semibold truncate">{fullName}</p>
+              <p className="text-xs text-slate-500 truncate">{email}</p>
+            </div>
+            <button
+              onClick={handleSignOut}
+              disabled={isSigningOut}
+              className="p-2 hover:bg-red-50 rounded-full transition-colors shrink-0">
+              <Image src={LogOutIcon} alt="logout" width={20} height={20} />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default Sidebar;
+
+const ProfileSkeleton = () => (
+  <div className="mt-auto flex items-center border border-slate-100 rounded-full p-2 bg-slate-50/50 animate-pulse w-full">
+    {/* Avatar Circle Skeleton */}
+    <div className="w-9 h-9 rounded-full bg-slate-200" />
+
+    <div className="ml-3 flex-1">
+      {/* Name Skeleton */}
+      <div className="h-3 w-24 bg-slate-200 rounded mb-2" />
+      {/* Email Skeleton */}
+      <div className="h-2 w-32 bg-slate-100 rounded" />
+    </div>
+
+    {/* Logout Icon Skeleton */}
+    <div className="w-5 h-5 mr-2 bg-slate-200 rounded-full" />
+  </div>
+);
