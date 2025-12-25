@@ -5,9 +5,10 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useGetCurrentUser, useSignOut } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/useToast";
-import { LogOut, Menu, X, User } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 import whiteLogo from "@/public/images/white-logo.svg";
 import { useQueryClient } from "@tanstack/react-query";
+import ProfileInitials from "../ProfileInitials";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,16 +33,6 @@ const Navbar = () => {
 
   const fullName = userData?.data?.full_name || "";
   const firstName = fullName.split(" ")[0] || "";
-  const initials = fullName ? (
-    fullName
-      .split(" ")
-      .map((n: string) => n[0])
-      .slice(0, 2)
-      .join("")
-      .toUpperCase()
-  ) : (
-    <User size={16} />
-  );
 
   const handleSignOut = () => {
     signOut(undefined, {
@@ -105,9 +96,7 @@ const Navbar = () => {
             href={"/profile"}
             className="flex items-center gap-x-4 border-l border-white/20 pl-8">
             <div className="flex items-center gap-x-3">
-              <div className="flex items-center justify-center size-9 rounded-full bg-[#acddee] font-bold text-black ring-2 ring-white/5">
-                {initials}
-              </div>
+              <ProfileInitials userFullName={fullName} />
               <p className="hidden lg:block text-white font-medium text-sm">
                 {firstName}
               </p>
