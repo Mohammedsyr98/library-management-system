@@ -10,35 +10,39 @@ const PageHead = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const firstName = userData?.data?.full_name?.split(" ")[0] ?? "";
+  const firstName = userData?.data?.full_name?.split(" ")[0] ?? "User";
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
-
+      if (value) params.set(name, value);
+      else params.delete(name); // Clean up URL if search is empty
       return params.toString();
     },
     [searchParams]
   );
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = createQueryString("search", e.target.value);
-    router.replace(`?${newQuery}`);
+    router.replace(`?${newQuery}`, { scroll: false });
   };
+
   return (
-    <div className="p-5 flex items-center justify-between">
+    <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 pt-16 md:pt-5">
       <div>
-        <p className="text-2xl font-semibold">Welcome, {firstName}</p>
-        <p className="text-[#8D8D8D]">
-          Monitor all of your projects and tasks here
+        <h1 className="text-xl md:text-2xl font-semibold">
+          Welcome, {firstName}
+        </h1>
+        <p className="text-sm md:text-base text-[#8D8D8D]">
+          Everything you need to stay on top of your work.
         </p>
       </div>
-      <div className="flex items-center border border-[#CBD5E1] p-2 w-[400px]">
-        <Image src={searchIcon} alt="search-icon" />{" "}
+      <div className="flex items-center border border-[#CBD5E1] p-2 w-full md:w-[300px] lg:w-[400px] bg-white rounded-md">
+        <Image src={searchIcon} alt="search-icon" width={20} height={20} />
         <input
           onChange={handleSearchChange}
           placeholder="Search..."
-          className="focus:outline-0 w-full pl-2"
+          className="focus:outline-0 w-full pl-2 bg-transparent text-sm"
           defaultValue={searchParams.get("search") ?? ""}
         />
       </div>
