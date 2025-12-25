@@ -101,7 +101,9 @@ const Navbar = () => {
             ))}
           </ul>
 
-          <div className="flex items-center gap-x-4 border-l border-white/20 pl-8">
+          <Link
+            href={"/profile"}
+            className="flex items-center gap-x-4 border-l border-white/20 pl-8">
             <div className="flex items-center gap-x-3">
               <div className="flex items-center justify-center size-9 rounded-full bg-[#acddee] font-bold text-black ring-2 ring-white/5">
                 {initials}
@@ -121,7 +123,7 @@ const Navbar = () => {
                 }`}
               />
             </button>
-          </div>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
