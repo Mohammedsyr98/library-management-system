@@ -3,7 +3,6 @@ import {
   pgPolicy,
   bigint,
   text,
-  jsonb,
   timestamp,
   foreignKey,
   unique,
@@ -40,7 +39,7 @@ export const books = pgTable(
       .default(sql`(now() AT TIME ZONE 'utc'::text)`)
       .notNull(),
   },
-  (table) => [
+  () => [
     pgPolicy("Authenticated users can read books", {
       as: "permissive",
       for: "select",

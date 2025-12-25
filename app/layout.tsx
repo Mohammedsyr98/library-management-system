@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import bgImage from "@/public/images/background.png";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ReactQueryClientProvider } from "@/components/ReactQueryClientProvider";
