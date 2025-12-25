@@ -167,9 +167,9 @@ export type Database = {
       };
       search_borrow_requests: {
         Args: {
-          limit_count: number;
-          offset_count: number;
-          search_text: string;
+          limit_count?: number | null;
+          offset_count?: number | null;
+          search_text?: string | null;
         };
         Returns: {
           book_id: number;

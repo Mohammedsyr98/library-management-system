@@ -69,22 +69,24 @@ export const getSimilarBooks = async (
   return { data, isFallback: false };
 };
 export const getBorrowRequests = async (
-  search: string,
-  from: number,
-  to: number
+  search?: string,
+  from?: number,
+  to?: number
 ) => {
   "use cache: private";
   cacheTag("borrows");
   cacheLife({ stale: 60, expire: 300 });
 
   const supabase = await createClient();
-  return await supabase.rpc("search_borrow_requests", {
-    search_text: search || "",
-    limit_count: to - from + 1,
-    offset_count: from,
+
+  const hasPagination = from !== undefined && to !== undefined;
+
+  return supabase.rpc("search_borrow_requests", {
+    search_text: search ?? null,
+    limit_count: hasPagination ? to - from + 1 : null,
+    offset_count: hasPagination ? from : null,
   });
 };
-
 export const getAllUsers = async (search: string, from: number, to: number) => {
   "use cache: private";
   cacheTag("users");

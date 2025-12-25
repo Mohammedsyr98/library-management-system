@@ -36,7 +36,7 @@ export async function proxy(request: NextRequest) {
 
   // 🟧 2. User trying to access ADMIN ROUTES
   if (role && role !== "ADMIN" && pathname.includes("dashboard")) {
-    const previousUrl = request.headers.get("referer") || "/home-page";
+    const previousUrl = request.headers.get("referer") || "/home";
 
     // Pass error message to client via cookies
     const redirectUrl = new URL(previousUrl, request.url);
