@@ -13,21 +13,24 @@ const Home = async () => {
   const { data: dashboardInsights } = await getDashboardInsights();
 
   return (
-    <div className="p-5">
+    <div className="p-5 pt-16 lg:pt-5">
       <div className="mb-10">
-        <p className="text-2xl font-semibold">
+        <p className="text-xl md:text-2xl font-semibold">
           Welcome, {user?.user_metadata?.full_name}
         </p>
         <p className="text-[#8D8D8D]">
           Here’s an overview of today’s library activity
         </p>
       </div>
-      <div className="flex items-center gap-5  w-full">
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
         {dashboardInsights?.stats.map((state) => (
           <StatCard key={state.label} title={state.label} count={state.value} />
         ))}
       </div>
-      <div className="flex gap-5 mt-5 h-[1048px] min-h-0">
+
+      <div className="flex flex-col 2xl:flex-row gap-5 mt-5 lg:h-[1048px]">
+        {/* Requests Column */}
         <div className="flex flex-col w-full gap-5">
           <BorrowRequests
             requests={dashboardInsights?.recent.borrow_requests ?? []}
@@ -36,9 +39,14 @@ const Home = async () => {
             requests={dashboardInsights?.recent.account_requests ?? []}
           />
         </div>
-        <RecentBooks
-          books={dashboardInsights?.recent.recently_added_books ?? []}
-        />
+
+        {/* Recently Added Books */}
+
+        <div className="w-full ">
+          <RecentBooks
+            books={dashboardInsights?.recent.recently_added_books ?? []}
+          />
+        </div>
       </div>
     </div>
   );

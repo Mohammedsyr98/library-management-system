@@ -94,7 +94,7 @@ const BookForm = ({ editBook }: { editBook?: BookRow }) => {
   }, [editBook]);
 
   return (
-    <div className="w-2/3">
+    <div className="lg:w-2/3">
       <Button
         className="max-w-[110]! max-h-10! mt-0! pr-2!"
         label="Go back"
