@@ -2,6 +2,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import searchIcon from "@/public/images/searchIcon.png";
 import Image from "next/image";
+import { useDebouncedCallback } from "use-debounce";
 
 const SearchBar = () => {
   const searchParams = useSearchParams();
@@ -12,11 +13,13 @@ const SearchBar = () => {
     params.set(name, value);
     return params.toString();
   };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newQuery = createQueryString("search", e.target.value);
-    router.replace(`?${newQuery}`);
-  };
+  const handleSearchChange = useDebouncedCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newQuery = createQueryString("search", e.target.value);
+      router.replace(`?${newQuery}`, { scroll: false });
+    },
+    1000
+  );
 
   return (
     <div className="flex items-center p-3 md:p-5 w-full max-w-[630px] bg-[#232839] rounded-[10px] mt-8 mx-auto">
