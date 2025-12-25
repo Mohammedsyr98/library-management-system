@@ -12,6 +12,7 @@ import { useGetCurrentUser, useSignOut } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/useToast";
 import { useQueryClient } from "@tanstack/react-query";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import ProfileInitials from "../ProfileInitials";
 
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
@@ -50,11 +51,6 @@ const SidebarContent = ({ closeMenu }: { closeMenu?: () => void }) => {
 
   const fullName = userData?.data?.full_name || "User";
   const email = userData?.data?.email || "";
-  const initials = fullName
-    .split(" ")
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join("");
 
   const handleSignOut = () => {
     signOut(undefined, {
@@ -96,9 +92,7 @@ const SidebarContent = ({ closeMenu }: { closeMenu?: () => void }) => {
       </div>
 
       <div className="mt-auto flex items-center border border-slate-100 rounded-full p-2 bg-slate-50/50">
-        <div className="bg-white border rounded-full w-10 h-10 flex items-center justify-center font-bold text-brand1">
-          {initials}
-        </div>
+        <ProfileInitials userFullName={fullName} />
         <div className="ml-3 flex-1 overflow-hidden">
           <p className="text-sm font-semibold truncate">{fullName}</p>
           <p className="text-xs text-slate-500 truncate">{email}</p>

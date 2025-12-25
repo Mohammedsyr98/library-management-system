@@ -10,6 +10,7 @@ import ConfirmDeleteUserModal from "./ConfirmDeleteUserModal";
 import { PopoverMenu } from "@/components/PopoverMenu";
 import { ROLES } from "@/constants/constants";
 import { invalidate } from "@/Services/server/actions";
+import ProfileInitials from "@/components/ProfileInitials";
 
 const UsersDataTable = ({
   data,
@@ -76,15 +77,7 @@ const UsersDataTable = ({
 
       cell: ({ row }) => (
         <div className="flex items-center gap-x-2 min-w-0">
-          {" "}
-          <div className="border rounded-[7px] w-[34px] text-center p-1 font-semibold text-green-600">
-            {row.original.full_name
-              .split(" ")
-              .map((n) => n[0])
-              .slice(0, 2)
-              .join("")
-              .toUpperCase()}
-          </div>
+          <ProfileInitials userFullName={row.original.full_name} />
           <div className="overflow-hidden">
             <p className="text-brand3 text-[14px] font-semibold truncate">
               {row.original.full_name}
