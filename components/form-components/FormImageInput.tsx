@@ -1,6 +1,6 @@
 import { useToast } from "@/hooks/useToast";
-import { Dispatch, ReactNode, SetStateAction, useCallback } from "react";
-import { FileWithPath, useDropzone } from "react-dropzone";
+import { Dispatch, ReactNode, SetStateAction } from "react";
+import { useDropzone } from "react-dropzone";
 import {
   Control,
   FieldErrors,
