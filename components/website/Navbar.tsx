@@ -19,7 +19,7 @@ const Navbar = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { data: userData } = useGetCurrentUser();
+  const { data: userData, isLoading } = useGetCurrentUser();
   const { mutate: signOut, isPending: isSigningOut } = useSignOut();
 
   // Scroll listener to toggle background
@@ -92,27 +92,25 @@ const Navbar = () => {
             ))}
           </ul>
 
-          <Link
-            href={"/profile"}
-            className="flex items-center gap-x-4 border-l border-white/20 pl-8">
-            <div className="flex items-center gap-x-3">
-              <ProfileInitials userFullName={fullName} />
-              <p className="hidden lg:block text-white font-medium text-sm">
-                {firstName}
-              </p>
-            </div>
+          {isLoading ? (
+            <NavProfileSkeleton />
+          ) : (
+            <div className="flex items-center gap-x-4 border-l border-white/20 pl-8 transition-all duration-500 ease-in-out">
+              <Link href="/profile" className="flex items-center gap-x-3 group">
+                <ProfileInitials userFullName={fullName} />
+                <p className="hidden lg:block text-white font-medium text-sm group-hover:text-[#EED1AC] transition-colors">
+                  {firstName}
+                </p>
+              </Link>
 
-            <button
-              onClick={handleSignOut}
-              disabled={isSigningOut}
-              className="p-2 hover:bg-red-500/10 rounded-full transition-all group">
-              <LogOut
-                className={`size-5 text-red-500 group-hover:text-red-400 transition-colors ${
-                  isSigningOut ? "animate-pulse" : ""
-                }`}
-              />
-            </button>
-          </Link>
+              <button
+                onClick={handleSignOut}
+                disabled={isSigningOut}
+                className="p-2 hover:bg-red-500/10 rounded-full transition-all group shrink-0">
+                <LogOut className={`size-5 text-red-500 ...`} />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -148,3 +146,18 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+const NavProfileSkeleton = () => (
+  <div className="flex items-center gap-x-4 border-l border-white/20 pl-8 animate-pulse">
+    <div className="flex items-center gap-x-3">
+      {/* Circle for ProfileInitials */}
+      <div className="size-9 rounded-full bg-white/50" />
+      {/* Width for firstName */}
+      <div className="hidden lg:block h-4 w-12 bg-white/50 rounded" />
+    </div>
+    {/* Logout Icon placeholder */}
+    <div className="p-2">
+      <div className="size-5 rounded-full bg-white/25" />
+    </div>
+  </div>
+);
