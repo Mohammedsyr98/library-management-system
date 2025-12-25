@@ -1,101 +1,114 @@
 "use client";
+import { useState } from "react";
 import Image from "next/image";
 import logo from "@/public/images/BlueBrandIcon.png";
 import LogOutIcon from "@/public/images/signOut.png";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { navLinks } from "@/constants/constants";
+import { Menu } from "lucide-react";
 
 import { useGetCurrentUser, useSignOut } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/useToast";
 import { useQueryClient } from "@tanstack/react-query";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const Sidebar = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      {/* MOBILE SIDEBAR */}
+      <div className="lg:hidden absolute top-4 left-4 z-50">
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger asChild>
+            <button className="p-2 bg-white border rounded-md shadow-sm active:scale-95 transition-all">
+              <Menu className="w-6 h-6 text-slate-700" />
+            </button>
+          </SheetTrigger>
+          <SheetContent side="left" className="p-0 w-72">
+            <SidebarContent closeMenu={() => setOpen(false)} />
+          </SheetContent>
+        </Sheet>
+      </div>
+
+      {/* DESKTOP SIDEBAR */}
+      <aside className="hidden lg:flex flex-col w-72 sticky top-0 h-screen border-r bg-white">
+        <SidebarContent />
+      </aside>
+    </>
+  );
+};
+
+const SidebarContent = ({ closeMenu }: { closeMenu?: () => void }) => {
   const pathname = usePathname();
   const router = useRouter();
   const queryClient = useQueryClient();
-
   const { showToast } = useToast();
-
   const { data: userData } = useGetCurrentUser();
   const { mutate: signOut, isPending: isSigningOut } = useSignOut();
 
-  const fullName = userData?.data?.full_name || "";
+  const fullName = userData?.data?.full_name || "User";
   const email = userData?.data?.email || "";
   const initials = fullName
-    ? fullName
-        .split(" ")
-        .map((n) => n[0])
-        .slice(0, 2)
-        .join("")
-    : "";
+    .split(" ")
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join("");
 
   const handleSignOut = () => {
     signOut(undefined, {
       onSuccess: (data) => {
         showToast(data.message, "success");
         router.push("/");
-        setTimeout(() => {
-          queryClient.clear();
-        }, 500);
-      },
-      onError: () => {
-        showToast(`Sign out failed`, "error");
+        setTimeout(() => queryClient.clear(), 500);
       },
     });
   };
+
   return (
-    <div className="flex flex-col justify-between w-1/5 p-4 min-h-screen">
+    <div className="flex flex-col justify-between h-full p-6">
       <div>
-        {/* Logo */}
-        <div className="flex items-center border-b border-dotted pb-6 mb-3">
+        <div className="flex items-center border-b border-dotted pb-6 mb-6">
           <Image src={logo} width={37} height={37} alt="Book-wise" />
           <p className="text-brand1 text-[28px] font-semibold ml-[5px]">
             BookWise
           </p>
         </div>
 
-        {/* Navigation */}
-        <div className="flex flex-col gap-1">
+        <nav className="flex flex-col gap-2">
           {navLinks.map((item) => {
             const isActive = pathname === item.path;
             const Icon = item.icon;
-
             return (
               <Link
                 key={item.path}
                 href={item.path}
-                className={`
-                  flex items-center gap-x-2.5 py-3.5 px-3 rounded-lg transition-all 
-                  ${isActive ? "bg-brand1 text-white" : "text-black hover:bg-brand1/10"}
-                `}>
-                <Icon
-                  className={`${isActive ? "text-white" : "text-black"} w-5 h-5`}
-                />
-                <p className={`text-[16px] font-medium`}>{item.label}</p>
+                onClick={closeMenu}
+                className={`flex items-center gap-x-3 py-3 px-4 rounded-lg transition-all 
+                  ${isActive ? "bg-brand1 text-white shadow-md" : "text-slate-600 hover:bg-brand1/10"}`}>
+                <Icon className="w-5 h-5" />
+                <span className="font-medium">{item.label}</span>
               </Link>
             );
           })}
-        </div>
+        </nav>
       </div>
 
-      {/* Account Info & Logout */}
-      <div className="mt-6 flex items-center border border-[#EDF1F1] rounded-[62px] p-2">
-        <div className="border rounded-[7px] w-max p-1 font-semibold text-green-600">
+      <div className="mt-auto flex items-center border border-slate-100 rounded-full p-2 bg-slate-50/50">
+        <div className="bg-white border rounded-full w-10 h-10 flex items-center justify-center font-bold text-brand1">
           {initials}
         </div>
-        <div className="ml-2.5 flex-1 overflow-hidden">
-          <p className="truncate">{fullName}</p>
-          <p className="text-[14px] text-[#8D8D8D] truncate">{email}</p>
+        <div className="ml-3 flex-1 overflow-hidden">
+          <p className="text-sm font-semibold truncate">{fullName}</p>
+          <p className="text-xs text-slate-500 truncate">{email}</p>
         </div>
-        <Image
-          src={LogOutIcon}
-          className={`cursor-pointer ${isSigningOut ? "opacity-50 pointer-events-none" : ""}`}
-          alt="log-out"
-          width={24}
-          height={24}
+        <button
           onClick={handleSignOut}
-        />
+          disabled={isSigningOut}
+          className="p-2 hover:bg-red-50 rounded-full transition-colors">
+          <Image src={LogOutIcon} alt="logout" width={20} height={20} />
+        </button>
       </div>
     </div>
   );
