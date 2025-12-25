@@ -8,10 +8,12 @@ import { navLinks } from "@/constants/constants";
 
 import { useGetCurrentUser, useSignOut } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/useToast";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Sidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { showToast } = useToast();
 
@@ -33,6 +35,9 @@ const Sidebar = () => {
       onSuccess: (data) => {
         showToast(data.message, "success");
         router.push("/");
+        setTimeout(() => {
+          queryClient.clear();
+        }, 500);
       },
       onError: () => {
         showToast(`Sign out failed`, "error");

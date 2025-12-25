@@ -36,6 +36,8 @@ export const useGetCurrentUser = (): UseQueryResult<IResponse, Error> => {
   return useQuery({
     queryKey: ["current-user"],
     queryFn: getCurrentUser,
+    retry: false,
+    staleTime: 0,
   });
 };
 export const useSignOut = (): UseMutationResult<

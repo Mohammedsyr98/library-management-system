@@ -7,6 +7,7 @@ import { useGetCurrentUser, useSignOut } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/useToast";
 import { LogOut, Menu, X, User } from "lucide-react";
 import whiteLogo from "@/public/images/white-logo.svg";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +16,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const { showToast } = useToast();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { data: userData } = useGetCurrentUser();
   const { mutate: signOut, isPending: isSigningOut } = useSignOut();
@@ -29,7 +31,7 @@ const Navbar = () => {
   }, []);
 
   const fullName = userData?.data?.full_name || "";
-  const firstName = fullName.split(" ")[0] || "User";
+  const firstName = fullName.split(" ")[0] || "";
   const initials = fullName ? (
     fullName
       .split(" ")
@@ -46,6 +48,9 @@ const Navbar = () => {
       onSuccess: (data) => {
         showToast(data.message, "success");
         router.push("/");
+        setTimeout(() => {
+          queryClient.clear();
+        }, 500);
       },
       onError: () => showToast(`Sign out failed`, "error"),
     });
