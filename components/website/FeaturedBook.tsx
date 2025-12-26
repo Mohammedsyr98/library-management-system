@@ -62,6 +62,11 @@ const FeaturedBook = ({ book }: { book: BookRow | null }) => {
       {/* Image */}
       <div className="flex-1 flex justify-center lg:justify-end">
         <Image
+          key={book.id}
+          placeholder="blur"
+          blurDataURL={
+            "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzUwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzUwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2YzZjRmNiIvPjwvc3ZnPg=="
+          }
           src={`${getBookImageUrl(book.image)}?v=${book.updated_at}`}
           alt={book.title}
           width={350}
