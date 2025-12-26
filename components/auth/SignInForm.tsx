@@ -9,22 +9,32 @@ import { useSignIn } from "@/hooks/useAuth";
 import { Button } from "../ui/Button";
 import { useRouter } from "next/navigation";
 import { useToast } from "../../hooks/useToast";
+import { useState } from "react";
+import { signOut } from "@/Services/client/services";
+import { DEMO_ACCOUNTS } from "@/constants/constants";
+
+type DemoRole = keyof typeof DEMO_ACCOUNTS;
 
 const SignInForm = ({
   setFormStep,
 }: {
   setFormStep: (value: string) => void;
 }) => {
+  const [demoRole, setDemoRole] = useState<DemoRole>("USER");
   const router = useRouter();
   const { showToast } = useToast();
 
   const {
     control,
     handleSubmit,
-
+    setValue,
     formState: { errors },
   } = useForm<SignInFormData>({
     resolver: yupResolver(signInSchema),
+    defaultValues: {
+      email: DEMO_ACCOUNTS[demoRole].email,
+      password: DEMO_ACCOUNTS[demoRole].password,
+    },
   });
   const { mutate: signIn, isPending } = useSignIn();
   const onSubmit = async (data: SignInFormData) => {
@@ -33,8 +43,9 @@ const SignInForm = ({
         showToast("Welcome back! You have logged in successfully.", "success");
         router.refresh();
       },
-      onError: (error: { message: string }) => {
+      onError: async (error: { message: string }) => {
         showToast(error.message, "error");
+        await signOut();
       },
     });
   };
@@ -53,6 +64,35 @@ const SignInForm = ({
           </p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-7 space-y-5">
+            <div className="mt-6">
+              {" "}
+              <p className="mb-3 text-sm text-[#D6E0FF]">Demo account</p>{" "}
+              <div className="flex gap-6">
+                {" "}
+                {(["USER", "ADMIN"] as DemoRole[]).map((role) => (
+                  <label
+                    key={role}
+                    className="flex items-center gap-2 cursor-pointer">
+                    {" "}
+                    <input
+                      type="radio"
+                      checked={demoRole === role}
+                      onChange={() => {
+                        setDemoRole(role);
+                        setValue("email", DEMO_ACCOUNTS[role].email);
+                        setValue("password", DEMO_ACCOUNTS[role].password);
+                      }}
+                      className="accent-[#E7C9A5]"
+                    />{" "}
+                    <span className="capitalize">{role}</span>{" "}
+                  </label>
+                ))}{" "}
+              </div>{" "}
+              <p className="mt-2 text-xs text-[#9DA8C3]">
+                {" "}
+                Selecting a demo account will auto-fill credentials{" "}
+              </p>{" "}
+            </div>
             <FormInput
               control={control}
               name="email"

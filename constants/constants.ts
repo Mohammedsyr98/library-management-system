@@ -48,3 +48,8 @@ export const BORROW_STATUS_BY_LABEL: Record<
 > = Object.fromEntries(
   Object.entries(BORROW_STATUS_LABELS).map(([k, v]) => [v, k])
 ) as Record<string, Database["public"]["Enums"]["borrow_status_enum"]>;
+
+export const DEMO_ACCOUNTS = {
+  USER: { email: "james.anderson@book-wise.com", password: "Password123" },
+  ADMIN: { email: "admin.demo@book-wise.com", password: "Password123" },
+} as const;
