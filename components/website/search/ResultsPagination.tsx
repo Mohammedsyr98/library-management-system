@@ -19,7 +19,7 @@ const ResultsPagination = ({
   const navigateToPage = (pageNumber: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", String(pageNumber));
-    router.push(`?${params.toString()}`);
+    router.push(`?${params.toString()}`, { scroll: false });
   };
   return (
     <>
