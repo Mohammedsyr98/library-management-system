@@ -39,7 +39,7 @@ const Search = async ({
       <span className="text-[30px] font-semibold text-white mt-6">
         Search Results for <span className="text-[#E7C9A5]">{search}</span>
       </span>
-      <section className="flex flex-col min-h-[780px] justify-between relative">
+      <section className="flex flex-col  justify-between relative">
         <Suspense
           key={suspenseKey}
           fallback={
@@ -48,14 +48,14 @@ const Search = async ({
             </div>
           }>
           <SearchResults search={search} from={from} to={to} />
+          {count !== 0 && (
+            <ResultsPagination
+              page={pageNumber}
+              limit={limit}
+              total={Number(count)}
+            />
+          )}
         </Suspense>
-        {count !== 0 && (
-          <ResultsPagination
-            page={pageNumber}
-            limit={limit}
-            total={Number(count)}
-          />
-        )}
       </section>
     </>
   );

@@ -13,8 +13,9 @@ const SearchResults = async ({
   to: number;
 }) => {
   const { data: books } = await getBooks(search, from, to);
+
   return (
-    <>
+    <div className="min-h-[600px]">
       {books?.length === 0 && (
         <div className=" mt-16 absolute left-1/2 -translate-x-1/2  flex flex-col items-center">
           <Image src={NoResults} height={200} width={200} alt="No-results" />
@@ -33,7 +34,7 @@ const SearchResults = async ({
           <BookCard book={book} key={book.id} />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
