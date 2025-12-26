@@ -9,7 +9,9 @@ export const signIn = async (data: SignInFormData) => {
     email,
     password,
   });
-
+  const { error: RPCError } = await getCurrentUser();
+  await signOut();
+  if (RPCError) throw { message: RPCError } as IErrorResponse;
   if (error) throw { message: error.message } as IErrorResponse;
 
   return authData;
