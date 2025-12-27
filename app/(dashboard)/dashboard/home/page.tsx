@@ -29,7 +29,7 @@ const Home = async () => {
         ))}
       </div>
 
-      <div className="flex flex-col 2xl:flex-row gap-5 mt-5 lg:h-[1048px]">
+      <div className="flex flex-col xl:flex-row gap-5 mt-5 lg:h-[1048px]">
         {/* Requests Column */}
         <div className="flex flex-col w-full gap-5">
           <BorrowRequests
