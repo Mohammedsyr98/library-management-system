@@ -1,36 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 Library Management System
 
-## Getting Started
+## Description
 
-First, run the development server:
+A **Library Management System** built with **Next.js** and **Supabase** to manage books, users, and borrowing operations with **role-based access control**.
+
+This project is designed as a real-world SaaS-style application, focusing on clean architecture, secure data access using Supabase RLS, and modern React patterns.
+
+---
+
+## 🚀 Tech Stack
+
+- **Next.js** (App Router)
+- **TypeScript**
+- **Supabase** (Authentication, Database, Row Level Security)
+- **React Hook Form**
+- **Yup** (schema validation)
+- **TanStack Query**
+- **TanStack Table**
+- **shadcn/ui**
+- **Tailwind CSS**
+
+---
+
+## ✨ Features
+
+- Authentication (Sign In / Sign Up)
+- Account approval system (users cannot access the app until approved by admin)
+- Role-based access control (**ADMIN / USER**)
+- Books management (add / edit / delete)
+  - Prevent deleting a book if it is currently borrowed
+
+- Borrowing system
+  - Users can borrow books
+  - Admin can update borrow status
+
+- User management
+  - Admin can delete users
+  - Prevent deleting users with active borrow records
+
+- Secure data access using **Supabase RLS policies**
+- Protected routes
+
+---
+
+## 👥 Roles & Permissions
+
+### **ADMIN**
+
+- Manage books (add, edit, delete)
+- Manage borrowing operations
+- Manage users (delete users)
+
+### **USER**
+
+- View available books
+- Borrow books
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Environment variables
+
+Create a `.env.local` file in the root of the project and add the following variables:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+```
+
+> ⚠️ Do not commit your environment variables to version control.
+
+### 3. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will be available at `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛡️ Security
 
-## Learn More
+- Authentication handled by Supabase Auth
+- Authorization enforced using **Row Level Security (RLS)**
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📌 Notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- The project uses modern React patterns and server/client component separation
+- Designed to be scalable and production-ready
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📷 Screenshots
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Sign In
+
+![Sign In Page](./screenshots/login.jpg)
+
+### Account Approval
+
+![Account Approval](./screenshots/account-approval.jpg)
+
+### Admin – Books Management
+
+![Admin Books](./screenshots/admin-books.jpg)
+
+### Admin – Users Management
+
+![Admin Users](./screenshots/admin-users.jpg)
+
+### User – Borrow Book
+
+![Borrow Book](./screenshots/user-borrow.jpg)
+
+---
+
+## 📄 License
+
+This project is for learning and portfolio purposes.
