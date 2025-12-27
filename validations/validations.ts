@@ -55,8 +55,5 @@ export const BookFormSchema = yup.object({
     .defined("Book image is required")
     .test("required", "Book image is required", (value) => value !== null),
 
-  summary: yup
-    .string()
-    .required("Summary is required")
-    .max(2000, "Summary cannot exceed 2000 characters"),
+  summary: yup.string().required("Summary is required"),
 });
