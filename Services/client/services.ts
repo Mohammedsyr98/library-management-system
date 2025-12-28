@@ -1,5 +1,4 @@
 import { supabase } from "@/lib/supabaseClient";
-import { invalidate } from "../server/actions";
 
 /* -- Auth -- */
 // export const signIn = async (data: SignInFormData) => {
@@ -121,113 +120,113 @@ export const deleteUser = async ({ userId }: { userId: string }) => {
   return data;
 };
 
-/* -- Books -- */
+// /* -- Books -- */
 
-export const addBook = async ({
-  BookFormData,
-}: {
-  BookFormData: BookFormData;
-}) => {
-  const { data, error: uploadImageError } = await supabase.storage
-    .from("media")
-    .upload(`books/photos/${crypto.randomUUID()}.png`, BookFormData.image!, {
-      upsert: true,
-    });
-  if (uploadImageError)
-    throw { message: uploadImageError.message } as IErrorResponse;
-  const { error: insertError } = await supabase
-    .from("books")
-    .insert([
-      {
-        title: BookFormData.title,
-        author: BookFormData.author,
-        genre: BookFormData.genre
-          .split(/[,\s]+/)
-          .map((g) => g.trim())
-          .filter(Boolean),
-        summary: BookFormData.summary,
-        image: data.path,
-        total_books: BookFormData.total_books,
-        available_books: BookFormData.total_books,
-      },
-    ])
-    .select();
-  if (insertError) {
-    await supabase.storage.from("media").remove([data.path]);
-    throw insertError;
-  }
-  return { message: "Book added successfully" };
-};
+// export const addBook = async ({
+//   BookFormData,
+// }: {
+//   BookFormData: BookFormData;
+// }) => {
+//   const { data, error: uploadImageError } = await supabase.storage
+//     .from("media")
+//     .upload(`books/photos/${crypto.randomUUID()}.png`, BookFormData.image!, {
+//       upsert: true,
+//     });
+//   if (uploadImageError)
+//     throw { message: uploadImageError.message } as IErrorResponse;
+//   const { error: insertError } = await supabase
+//     .from("books")
+//     .insert([
+//       {
+//         title: BookFormData.title,
+//         author: BookFormData.author,
+//         genre: BookFormData.genre
+//           .split(/[,\s]+/)
+//           .map((g) => g.trim())
+//           .filter(Boolean),
+//         summary: BookFormData.summary,
+//         image: data.path,
+//         total_books: BookFormData.total_books,
+//         available_books: BookFormData.total_books,
+//       },
+//     ])
+//     .select();
+//   if (insertError) {
+//     await supabase.storage.from("media").remove([data.path]);
+//     throw insertError;
+//   }
+//   return { message: "Book added successfully" };
+// };
 
-export const editBook = async ({
-  BookFormData,
-  bookId,
-  imageKey,
-}: {
-  BookFormData: BookFormData;
-  bookId: BookRow["id"];
-  imageKey: string;
-}) => {
-  const { data, error: uploadImageError } = await supabase.storage
-    .from("media")
-    .upload(`books/photos/${imageKey}`, BookFormData.image!, {
-      upsert: true,
-      cacheControl: "0",
-    });
-  if (uploadImageError)
-    throw { message: uploadImageError.message } as IErrorResponse;
-  const { error: insertError } = await supabase
-    .from("books")
-    .update({
-      title: BookFormData.title,
-      author: BookFormData.author,
-      genre: BookFormData.genre
-        .split(/[,\s]+/)
-        .map((g) => g.trim())
-        .filter(Boolean),
-      summary: BookFormData.summary,
-      image: data.path,
-      total_books: BookFormData.total_books,
-    })
-    .eq("id", bookId)
-    .select();
-  if (insertError) {
-    await supabase.storage.from("media").remove([data.path]);
-    throw insertError;
-  }
-  return { message: "Book updated successfully" };
-};
+// export const editBook = async ({
+//   BookFormData,
+//   bookId,
+//   imageKey,
+// }: {
+//   BookFormData: BookFormData;
+//   bookId: BookRow["id"];
+//   imageKey: string;
+// }) => {
+//   const { data, error: uploadImageError } = await supabase.storage
+//     .from("media")
+//     .upload(`books/photos/${imageKey}`, BookFormData.image!, {
+//       upsert: true,
+//       cacheControl: "0",
+//     });
+//   if (uploadImageError)
+//     throw { message: uploadImageError.message } as IErrorResponse;
+//   const { error: insertError } = await supabase
+//     .from("books")
+//     .update({
+//       title: BookFormData.title,
+//       author: BookFormData.author,
+//       genre: BookFormData.genre
+//         .split(/[,\s]+/)
+//         .map((g) => g.trim())
+//         .filter(Boolean),
+//       summary: BookFormData.summary,
+//       image: data.path,
+//       total_books: BookFormData.total_books,
+//     })
+//     .eq("id", bookId)
+//     .select();
+//   if (insertError) {
+//     await supabase.storage.from("media").remove([data.path]);
+//     throw insertError;
+//   }
+//   return { message: "Book updated successfully" };
+// };
 
-export const deleteBook = async ({ bookId }: { bookId: BookRow["id"] }) => {
-  const { error } = await supabase.from("books").delete().eq("id", bookId);
+// export const deleteBook = async ({ bookId }: { bookId: BookRow["id"] }) => {
+//   const { error } = await supabase.from("books").delete().eq("id", bookId);
 
-  if (error) {
-    throw { message: error.message || "Delete failed." };
-  }
-  invalidate("books");
-  return { message: "Book deleted successfully" };
-};
+//   if (error) {
+//     throw { message: error.message || "Delete failed." };
+//   }
+//   invalidate("books");
+//   return { message: "Book deleted successfully" };
+// };
 
-/* -- Book borrows -- */
-export const borrowBook = async ({ book_id }: { book_id: number }) => {
-  const { error } = await supabase
-    .from("borrow_requests")
-    .insert({ book_id, borrow_status: "borrowed" });
+// /* -- Book borrows -- */
+// export const borrowBook = async ({ book_id }: { book_id: number }) => {
+//   const { error } = await supabase
+//     .from("borrow_requests")
+//     .insert({ book_id, borrow_status: "borrowed" });
 
-  if (error) throw { message: error.message } as IErrorResponse;
-  invalidate("books");
-  return { message: "Book borrowed successfully" };
-};
+//   if (error) throw { message: error.message } as IErrorResponse;
+//   invalidate("books");
+//   return { message: "Book borrowed successfully" };
+// };
 
-export const updateBorrowStatus = async ({
-  borrowId,
-  newStatus,
-}: UpdateBorrowStatusParams) => {
-  const { error } = await supabase
-    .from("borrow_requests")
-    .update({ borrow_status: newStatus })
-    .eq("id", borrowId)
-    .select();
-  if (error) throw { message: error.message } as IErrorResponse;
-  return { message: "Borrow request status updated successfully" };
-};
+// export const updateBorrowStatus = async ({
+//   borrowId,
+//   newStatus,
+// }: UpdateBorrowStatusParams) => {
+//   const { error } = await supabase
+//     .from("borrow_requests")
+//     .update({ borrow_status: newStatus })
+//     .eq("id", borrowId)
+//     .select();
+//   if (error) throw { message: error.message } as IErrorResponse;
+//   return { message: "Borrow request status updated successfully" };
+// };

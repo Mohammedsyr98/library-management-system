@@ -4,24 +4,16 @@ import {
   deleteBook,
   editBook,
   updateBorrowStatus,
-} from "@/Services/client/services";
+} from "@/Services/actions.books";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 
 export const useAddBook = (): UseMutationResult<
   { message: string },
   IErrorResponse,
-  {
-    BookFormData: BookFormData;
-  }
+  FormData
 > => {
-  return useMutation<
-    { message: string },
-    IErrorResponse,
-    {
-      BookFormData: BookFormData;
-    }
-  >({
-    mutationFn: ({ BookFormData }) => addBook({ BookFormData }),
+  return useMutation({
+    mutationFn: (formData: FormData) => addBook(formData),
   });
 };
 
@@ -29,7 +21,7 @@ export const useUpdateBook = (): UseMutationResult<
   { message: string },
   IErrorResponse,
   {
-    BookFormData: BookFormData;
+    BookFormData: FormData;
     bookId: BookRow["id"];
     imageKey: string;
   }
@@ -38,7 +30,7 @@ export const useUpdateBook = (): UseMutationResult<
     { message: string },
     IErrorResponse,
     {
-      BookFormData: BookFormData;
+      BookFormData: FormData;
       bookId: BookRow["id"];
       imageKey: string;
     }

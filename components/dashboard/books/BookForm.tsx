@@ -6,7 +6,6 @@ import FormTextarea from "@/components/form-components/FormTextarea";
 import { Button } from "@/components/ui/Button";
 import { useAddBook, useUpdateBook } from "@/hooks/useBooks";
 import { useToast } from "@/hooks/useToast";
-import { invalidate } from "@/Services/server/actions";
 import { getBookImageUrl, urlToObject } from "@/utils";
 import { BookFormSchema } from "@/validations/validations";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -44,28 +43,30 @@ const BookForm = ({ editBook }: { editBook?: BookRow }) => {
   const router = useRouter();
 
   const onSubmit = (data: BookFormData) => {
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("author", data.author);
+    formData.append("summary", data.summary);
+    formData.append("genre", data.genre);
+    formData.append("total_books", data.total_books.toString());
+    formData.append("image", data.image as File);
     if (!editBook) {
-      addBook(
-        { BookFormData: data },
-        {
-          onSuccess: async (data) => {
-            await invalidate("books");
-            showToast(data.message, "success");
-            reset();
-            setImagePreview("");
-          },
-          onError: (error) => {
-            showToast(error.message, "error");
-          },
-        }
-      );
+      addBook(formData, {
+        onSuccess: async (data) => {
+          showToast(data.message, "success");
+          reset();
+          setImagePreview("");
+        },
+        onError: (error) => {
+          showToast(error.message, "error");
+        },
+      });
     } else {
       const imageKey = editBook?.image?.split("/")[2] ?? "";
       updateBook(
-        { BookFormData: data, bookId: editBook.id, imageKey },
+        { BookFormData: formData, bookId: editBook.id, imageKey },
         {
           onSuccess: async (data) => {
-            await invalidate("books");
             showToast(data.message, "success");
           },
           onError: (error) => {
