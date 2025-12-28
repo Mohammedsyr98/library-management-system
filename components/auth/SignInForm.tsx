@@ -10,8 +10,8 @@ import { Button } from "../ui/Button";
 import { useRouter } from "next/navigation";
 import { useToast } from "../../hooks/useToast";
 import { useState } from "react";
-import { signOut } from "@/Services/client/services";
 import { DEMO_ACCOUNTS } from "@/constants/constants";
+import { signOut } from "@/Services/actions.auth";
 
 type DemoRole = keyof typeof DEMO_ACCOUNTS;
 
