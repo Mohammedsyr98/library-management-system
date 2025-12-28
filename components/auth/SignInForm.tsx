@@ -39,8 +39,8 @@ const SignInForm = ({
   const { mutate: signIn, isPending } = useSignIn();
   const onSubmit = async (data: SignInFormData) => {
     signIn(data, {
-      onSuccess: () => {
-        showToast("Welcome back! You have logged in successfully.", "success");
+      onSuccess: (data) => {
+        showToast(data.message, "success");
         router.refresh();
       },
       onError: async (error: { message: string }) => {

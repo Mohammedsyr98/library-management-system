@@ -2,49 +2,49 @@ import { supabase } from "@/lib/supabaseClient";
 import { invalidate } from "../server/actions";
 
 /* -- Auth -- */
-export const signIn = async (data: SignInFormData) => {
-  const { email, password } = data;
+// export const signIn = async (data: SignInFormData) => {
+//   const { email, password } = data;
 
-  const { data: authData, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-  const { error: RPCError } = await getCurrentUser();
-  if (RPCError) throw { message: RPCError } as IErrorResponse;
-  if (error) throw { message: error.message } as IErrorResponse;
+//   const { data: authData, error } = await supabase.auth.signInWithPassword({
+//     email,
+//     password,
+//   });
+//   const { error: RPCError } = await getCurrentUser();
+//   if (RPCError) throw { message: RPCError } as IErrorResponse;
+//   if (error) throw { message: error.message } as IErrorResponse;
 
-  return authData;
-};
+//   return authData;
+// };
 
-export const signUp = async (data: SignUpFormData) => {
-  const { email, password, university_id, full_name } = data;
+// export const signUp = async (data: SignUpFormData) => {
+//   const { email, password, university_id, full_name } = data;
 
-  const { data: authData, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        full_name,
-        university_id,
-      },
-    },
-  });
-  const userId = authData.user?.id;
+//   const { data: authData, error } = await supabase.auth.signUp({
+//     email,
+//     password,
+//     options: {
+//       data: {
+//         full_name,
+//         university_id,
+//       },
+//     },
+//   });
+//   const userId = authData.user?.id;
 
-  if (error) throw { message: error.message } as IErrorResponse;
-  if (!userId) throw new Error("User ID not found after signup");
-  if (error) throw error;
-  return authData;
-};
+//   if (error) throw { message: error.message } as IErrorResponse;
+//   if (!userId) throw new Error("User ID not found after signup");
+//   if (error) throw error;
+//   return authData;
+// };
 
-export const getCurrentUser = async () => {
-  const { data: userData, error } = await supabase.rpc("get_current_user");
+// export const getCurrentUser = async () => {
+//   const { data: userData, error } = await supabase.rpc("get_current_user");
 
-  if (error) throw { message: error.message } as IErrorResponse;
+//   if (error) throw { message: error.message } as IErrorResponse;
 
-  if (error) throw error;
-  return userData;
-};
+//   if (error) throw error;
+//   return userData;
+// };
 export const signOut = async () => {
   const { error } = await supabase.auth.signOut();
   if (error) throw new Error(error.message);

@@ -3,7 +3,7 @@ import {
   signIn,
   signOut,
   signUp,
-} from "@/Services/client/services";
+} from "@/Services/actions.auth";
 import { AuthResponse } from "@supabase/supabase-js";
 import {
   useMutation,
@@ -13,21 +13,29 @@ import {
 } from "@tanstack/react-query";
 
 export const useSignIn = (): UseMutationResult<
-  AuthResponse["data"],
+  AuthResponse["data"] & { message: string },
   IErrorResponse,
   SignInFormData
 > => {
-  return useMutation<AuthResponse["data"], IErrorResponse, SignInFormData>({
+  return useMutation<
+    AuthResponse["data"] & { message: string },
+    IErrorResponse,
+    SignInFormData
+  >({
     mutationFn: (data) => signIn(data),
   });
 };
 
 export const useSignUp = (): UseMutationResult<
-  AuthResponse["data"],
+  AuthResponse["data"] & { message: string },
   IErrorResponse,
   SignUpFormData
 > => {
-  return useMutation<AuthResponse["data"], IErrorResponse, SignUpFormData>({
+  return useMutation<
+    AuthResponse["data"] & { message: string },
+    IErrorResponse,
+    SignUpFormData
+  >({
     mutationFn: (data) => signUp(data),
   });
 };
