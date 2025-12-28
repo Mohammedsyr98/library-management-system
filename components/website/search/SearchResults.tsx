@@ -1,4 +1,4 @@
-import { getBooks } from "@/Services/server/services";
+import { getBooks } from "@/services/queries/books";
 import Image from "next/image";
 import NoResults from "@/public/images/noResults.png";
 import BookCard from "../BookCard";

@@ -1,6 +1,6 @@
 import AccountRequestsDataTable from "@/components/dashboard/account-request/AccountRequestsDataTable";
 import PageHead from "@/components/dashboard/PageHead";
-import { getAccountRequests } from "@/Services/server/services";
+import { getAccountRequests } from "@/services/queries/users";
 import { getPaginationInfo } from "@/utils";
 
 const AccountRequest = async ({

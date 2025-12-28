@@ -1,4 +1,4 @@
-import { getSimilarBooks } from "@/Services/server/services";
+import { getSimilarBooks } from "@/services/queries/books";
 import BookCard from "../BookCard";
 
 const SimilarBooks = async ({

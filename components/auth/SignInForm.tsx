@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useToast } from "../../hooks/useToast";
 import { useState } from "react";
 import { DEMO_ACCOUNTS } from "@/constants/constants";
-import { signOut } from "@/Services/actions.auth";
+import { signOut } from "@/services/actions/actions.auth";
 
 type DemoRole = keyof typeof DEMO_ACCOUNTS;
 

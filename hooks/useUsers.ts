@@ -2,7 +2,7 @@ import {
   deleteUser,
   updateAccountRequest,
   updateUserRole,
-} from "@/Services/actions.user";
+} from "@/services/actions/actions.user";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 
 export const useUpdateUserRole = (): UseMutationResult<

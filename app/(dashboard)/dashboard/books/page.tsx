@@ -1,7 +1,7 @@
 import BooksDataTable from "@/components/dashboard/books/BooksDataTable";
 import CreateBookButton from "@/components/dashboard/books/CreateBookButton";
 import PageHead from "@/components/dashboard/PageHead";
-import { getBooks } from "@/Services/server/services";
+import { getBooks } from "@/services/queries/books";
 import { getPaginationInfo } from "@/utils";
 
 const AllBooks = async ({

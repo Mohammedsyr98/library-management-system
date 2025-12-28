@@ -3,7 +3,7 @@ import {
   signIn,
   signOut,
   signUp,
-} from "@/Services/actions.auth";
+} from "@/services/actions/actions.auth";
 import { AuthResponse } from "@supabase/supabase-js";
 import {
   useMutation,
