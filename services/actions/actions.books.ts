@@ -9,7 +9,7 @@ export const addBook = async (formData: FormData) => {
 
   const imageFile = formData.get("image") as File;
   if (!imageFile) {
-    throw new Error("Image is required");
+    return { success: false, message: "Image is required" };
   }
 
   const title = formData.get("title") as string;
@@ -25,7 +25,7 @@ export const addBook = async (formData: FormData) => {
     });
 
   if (uploadImageError) {
-    throw new Error(uploadImageError.message);
+    return { success: false, message: uploadImageError.message };
   }
 
   const { error: insertError } = await supabase.from("books").insert([
@@ -45,14 +45,12 @@ export const addBook = async (formData: FormData) => {
 
   if (insertError) {
     await supabase.storage.from("media").remove([data.path]);
-    throw new Error(insertError.message);
+    return { success: false, message: insertError.message };
   }
 
   updateTag("books");
-  updateTag("/dashboard-insights");
-  return {
-    message: "Book added successfully",
-  };
+  updateTag("dashboard-insights");
+  return { success: true, message: "Book added successfully" };
 };
 
 export const editBook = async ({
@@ -61,11 +59,12 @@ export const editBook = async ({
   imageKey,
 }: {
   BookFormData: FormData;
-  bookId: BookRow["id"];
+  bookId: number;
   imageKey: string;
 }) => {
   const supabase = await createClient();
   const imageFile = BookFormData.get("image") as File;
+
   const { data, error: uploadImageError } = await supabase.storage
     .from("media")
     .upload(`books/photos/${imageKey}`, imageFile, {
@@ -74,7 +73,7 @@ export const editBook = async ({
     });
 
   if (uploadImageError) {
-    throw new Error(uploadImageError.message);
+    return { success: false, message: uploadImageError.message };
   }
 
   const title = BookFormData.get("title") as string;
@@ -100,25 +99,25 @@ export const editBook = async ({
 
   if (updateError) {
     await supabase.storage.from("media").remove([data.path]);
-    throw new Error(updateError.message);
+    return { success: false, message: updateError.message };
   }
 
-  updateTag("/books");
-  updateTag("/dashboard-insights");
-  return { message: "Book updated successfully" };
+  updateTag("books");
+  updateTag("dashboard-insights");
+  return { success: true, message: "Book updated successfully" };
 };
 
-export const deleteBook = async ({ bookId }: { bookId: BookRow["id"] }) => {
+export const deleteBook = async ({ bookId }: { bookId: number }) => {
   const supabase = await createClient();
   const { error } = await supabase.from("books").delete().eq("id", bookId);
 
   if (error) {
-    throw new Error(error.message || "Delete failed.");
+    return { success: false, message: error.message || "Delete failed." };
   }
 
-  updateTag("/books");
-  updateTag("/dashboard-insights");
-  return { message: "Book deleted successfully" };
+  updateTag("books");
+  updateTag("dashboard-insights");
+  return { success: true, message: "Book deleted successfully" };
 };
 
 /* -- Book borrows -- */
@@ -130,18 +129,22 @@ export const borrowBook = async ({ book_id }: { book_id: number }) => {
     .insert({ book_id, borrow_status: "borrowed" });
 
   if (error) {
-    throw new Error(error.message);
+    return { success: false, message: error.message };
   }
 
-  updateTag("/books");
-  updateTag("/dashboard-insights");
-  return { message: "Book borrowed successfully" };
+  updateTag("books");
+  updateTag("borrows");
+  updateTag("dashboard-insights");
+  return { success: true, message: "Book borrowed successfully" };
 };
 
 export const updateBorrowStatus = async ({
   borrowId,
   newStatus,
-}: UpdateBorrowStatusParams) => {
+}: {
+  borrowId: number;
+  newStatus: "borrowed" | "returned" | "late_return";
+}) => {
   const supabase = await createClient();
   const { error } = await supabase
     .from("borrow_requests")
@@ -149,10 +152,14 @@ export const updateBorrowStatus = async ({
     .eq("id", borrowId);
 
   if (error) {
-    throw new Error(error.message);
+    return { success: false, message: error.message };
   }
 
-  updateTag("/books");
-  updateTag("/dashboard-insights");
-  return { message: "Borrow request status updated successfully" };
+  updateTag("books");
+  updateTag("borrows");
+  updateTag("dashboard-insights");
+  return {
+    success: true,
+    message: "Borrow request status updated successfully",
+  };
 };

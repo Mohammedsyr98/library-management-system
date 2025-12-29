@@ -4,7 +4,6 @@ import {
   signOut,
   signUp,
 } from "@/services/actions/actions.auth";
-import { AuthResponse } from "@supabase/supabase-js";
 import {
   useMutation,
   UseMutationResult,
@@ -13,30 +12,26 @@ import {
 } from "@tanstack/react-query";
 
 export const useSignIn = (): UseMutationResult<
-  AuthResponse["data"] & { message: string },
+  MutationResult,
   IErrorResponse,
   SignInFormData
 > => {
-  return useMutation<
-    AuthResponse["data"] & { message: string },
-    IErrorResponse,
-    SignInFormData
-  >({
+  return useMutation<MutationResult, IErrorResponse, SignInFormData>({
     mutationFn: (data) => signIn(data),
   });
 };
 
 export const useSignUp = (): UseMutationResult<
-  AuthResponse["data"] & { message: string },
+  MutationResult,
   IErrorResponse,
   SignUpFormData
 > => {
-  return useMutation<
-    AuthResponse["data"] & { message: string },
-    IErrorResponse,
-    SignUpFormData
-  >({
-    mutationFn: (data) => signUp(data),
+  return useMutation<MutationResult, IErrorResponse, SignUpFormData>({
+    mutationFn: async (data) => {
+      const res = await signUp(data);
+      if (!res.success) throw new Error(res.message);
+      return res as MutationResult;
+    },
   });
 };
 

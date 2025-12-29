@@ -8,72 +8,75 @@ import {
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 
 export const useAddBook = (): UseMutationResult<
-  { message: string },
-  IErrorResponse,
+  MutationResult,
+  Error,
   FormData
 > => {
   return useMutation({
-    mutationFn: (formData: FormData) => addBook(formData),
+    mutationFn: async (formData: FormData) => {
+      const res = await addBook(formData);
+      if (!res.success) throw new Error(res.message);
+      return res as MutationResult;
+    },
   });
 };
 
 export const useUpdateBook = (): UseMutationResult<
-  { message: string },
-  IErrorResponse,
+  MutationResult,
+  Error,
   {
     BookFormData: FormData;
-    bookId: BookRow["id"];
+    bookId: number;
     imageKey: string;
   }
 > => {
-  return useMutation<
-    { message: string },
-    IErrorResponse,
-    {
-      BookFormData: FormData;
-      bookId: BookRow["id"];
-      imageKey: string;
-    }
-  >({
-    mutationFn: ({ BookFormData, bookId, imageKey }) =>
-      editBook({ BookFormData, bookId, imageKey }),
+  return useMutation({
+    mutationFn: async ({ BookFormData, bookId, imageKey }) => {
+      const res = await editBook({ BookFormData, bookId, imageKey });
+      if (!res.success) throw new Error(res.message);
+      return res as MutationResult;
+    },
   });
 };
 
 export const useBorrowBook = (): UseMutationResult<
-  { message: string },
-  IErrorResponse,
+  MutationResult,
+  Error,
   { book_id: number }
 > => {
-  return useMutation<{ message: string }, IErrorResponse, { book_id: number }>({
-    mutationFn: ({ book_id }) => borrowBook({ book_id }),
+  return useMutation({
+    mutationFn: async ({ book_id }) => {
+      const res = await borrowBook({ book_id });
+      if (!res.success) throw new Error(res.message);
+      return res as MutationResult;
+    },
   });
 };
+
 export const useUpdateBorrowStatus = (): UseMutationResult<
-  { message: string },
-  IErrorResponse,
+  MutationResult,
+  Error,
   UpdateBorrowStatusParams
 > => {
-  return useMutation<
-    { message: string },
-    IErrorResponse,
-    UpdateBorrowStatusParams
-  >({
-    mutationFn: ({ newStatus, borrowId }) =>
-      updateBorrowStatus({ borrowId, newStatus }),
+  return useMutation({
+    mutationFn: async ({ newStatus, borrowId }) => {
+      const res = await updateBorrowStatus({ borrowId, newStatus });
+      if (!res.success) throw new Error(res.message);
+      return res as MutationResult;
+    },
   });
 };
 
 export const useDeleteBook = (): UseMutationResult<
-  { message: string },
-  IErrorResponse,
-  { bookId: BookRow["id"] }
+  MutationResult,
+  Error,
+  { bookId: number }
 > => {
-  return useMutation<
-    { message: string },
-    IErrorResponse,
-    { bookId: BookRow["id"] }
-  >({
-    mutationFn: ({ bookId }) => deleteBook({ bookId }),
+  return useMutation({
+    mutationFn: async ({ bookId }) => {
+      const res = await deleteBook({ bookId });
+      if (!res.success) throw new Error(res.message);
+      return res as MutationResult;
+    },
   });
 };

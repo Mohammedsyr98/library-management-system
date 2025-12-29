@@ -6,21 +6,29 @@ export const signIn = async (data: SignInFormData) => {
   const supabase = await createClient();
   const { email, password } = data;
 
-  const { data: authData, error } = await supabase.auth.signInWithPassword({
+  const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
+
   if (error) {
-    throw new Error(error.message);
+    return {
+      success: false,
+      message: error.message || "Login failed. Please try again.",
+    };
   }
   const { error: RPCError } = await supabase.rpc("get_current_user");
   if (RPCError) {
-    throw new Error(RPCError.message || "Failed to fetch user profile");
+    await supabase.auth.signOut();
+    return {
+      success: false,
+      message:
+        RPCError.message ||
+        "Access denied. Your account may be pending approval.",
+    };
   }
-
   return {
-    user: authData.user,
-    session: authData.session,
+    success: true,
     message: "Welcome back! You have logged in successfully.",
   };
 };
@@ -29,7 +37,7 @@ export const signUp = async (data: SignUpFormData) => {
   const supabase = await createClient();
   const { email, password, university_id, full_name } = data;
 
-  const { data: authData, error } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -41,12 +49,15 @@ export const signUp = async (data: SignUpFormData) => {
   });
 
   if (error) {
-    throw new Error(error.message);
+    await supabase.auth.signOut();
+    return {
+      success: false,
+      message: error.message,
+    };
   }
 
   return {
-    user: authData.user,
-    session: authData.session,
+    success: true,
     message:
       "Account created successfully. Please wait for admin approval to activate your account.",
   };

@@ -17,14 +17,16 @@ export const updateUserRole = async ({
     .eq("id", userId)
     .select();
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    return { success: false, message: error.message };
+  }
 
   if (!data || data.length === 0) {
-    throw new Error("Update failed. No rows were updated.");
+    return { success: false, message: "Update failed. No rows were updated." };
   }
 
   updateTag("users");
-  return { message: "Role updated successfully" };
+  return { success: true, message: "Role updated successfully" };
 };
 
 /* -- Account Requests -- */
@@ -41,15 +43,19 @@ export const updateAccountRequest = async ({
     .eq("id", userId)
     .select();
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    return { success: false, message: error.message };
+  }
 
   if (!data || data.length === 0) {
-    throw new Error("Update failed. No rows were updated.");
+    return { success: false, message: "Update failed. No rows were updated." };
   }
 
   updateTag("users");
+  updateTag("account-requests");
 
   return {
+    success: true,
     message:
       action === "APPROVED"
         ? "Account approved and access granted."
@@ -62,11 +68,21 @@ export const updateAccountRequest = async ({
 export const deleteUser = async ({ userId }: { userId: string }) => {
   const supabase = await createClient();
 
-  const { data: sessionData } = await supabase.auth.getSession();
+  // Security: Verify user server-side
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+  if (authError || !user) {
+    return { success: false, message: "Unauthorized access." };
+  }
 
+  const { data: sessionData } = await supabase.auth.getSession();
   const token = sessionData.session?.access_token;
 
-  if (!token) throw new Error("Unauthorized: No active session.");
+  if (!token) {
+    return { success: false, message: "No active session found." };
+  }
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/bright-worker`,
@@ -83,9 +99,12 @@ export const deleteUser = async ({ userId }: { userId: string }) => {
   const data = await res.json();
 
   if (!res.ok) {
-    throw new Error(data.message);
+    return { success: false, message: data.message || "Delete failed." };
   }
 
   updateTag("users");
-  return { message: data.message || "User deleted successfully" };
+  return {
+    success: true,
+    message: data.message || "User deleted successfully",
+  };
 };
