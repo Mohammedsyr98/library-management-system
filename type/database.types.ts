@@ -139,7 +139,20 @@ export type Database = {
       };
     };
     Views: {
-      [_ in never]: never;
+      users_with_borrowed_count: {
+        Row: {
+          borrowed_books: number | null;
+          created_at: string | null;
+          email: string | null;
+          full_name: string | null;
+          id: string | null;
+          last_activity_date: string | null;
+          role: Database["public"]["Enums"]["role"] | null;
+          status: Database["public"]["Enums"]["status"] | null;
+          university_id: number | null;
+        };
+        Relationships: [];
+      };
     };
     Functions: {
       delete_book_safe: { Args: { book_id: number }; Returns: undefined };

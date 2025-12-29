@@ -6,8 +6,8 @@ import warningIcon from "@/public/images/Warning.png";
 interface ConfirmDeletUserModalProps {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
-  selectedUser: IUser | null;
-  setSelectedUser: (value: IUser | null) => void;
+  selectedUser: AllUsersWithBorrowedCountRow | null;
+  setSelectedUser: (value: AllUsersWithBorrowedCountRow | null) => void;
   isPending: boolean;
   onDelete: () => void;
 }

@@ -94,7 +94,7 @@ export const getAllUsers = async (search: string, from: number, to: number) => {
 
   const supabase = await createClient();
   return await supabase
-    .from("users")
+    .from("users_with_borrowed_count")
     .select("*", { count: "exact" })
     .or(`full_name.ilike.%${search}%,email.ilike.%${search}%`)
     .order("created_at", { ascending: false })
