@@ -1,6 +1,6 @@
 import SimilarBooks from "@/components/website/book-details/SimilarBooks";
 import FeaturedBook from "@/components/website/FeaturedBook";
-import { getBook } from "@/Services/server/services";
+import { getBook } from "@/services/queries/books";
 
 const BookDetails = async ({
   searchParams,

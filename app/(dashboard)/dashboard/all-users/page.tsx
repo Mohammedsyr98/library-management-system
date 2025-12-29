@@ -1,6 +1,6 @@
 import PageHead from "@/components/dashboard/PageHead";
 import UsersDataTable from "@/components/dashboard/users/UsersDataTable";
-import { getAllUsers } from "@/Services/server/services";
+import { getAllUsers } from "@/services/queries/users";
 import { getPaginationInfo } from "@/utils";
 import { createClient } from "@/utils/supabase/supabase-server";
 

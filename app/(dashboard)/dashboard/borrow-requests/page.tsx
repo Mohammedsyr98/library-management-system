@@ -1,6 +1,6 @@
 import RequestsDataTable from "@/components/dashboard/borrow-requests/RequestsDataTabel";
 import PageHead from "@/components/dashboard/PageHead";
-import { getBorrowRequests } from "@/Services/server/services";
+import { getBorrowRequests } from "@/services/queries/books";
 import { getPaginationInfo } from "@/utils";
 
 const BarrowRequests = async ({

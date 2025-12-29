@@ -9,7 +9,6 @@ import { useState } from "react";
 import ConfirmDeleteUserModal from "./ConfirmDeleteUserModal";
 import { PopoverMenu } from "@/components/PopoverMenu";
 import { ROLES } from "@/constants/constants";
-import { invalidate } from "@/Services/server/actions";
 import ProfileInitials from "@/components/ProfileInitials";
 
 const UsersDataTable = ({
@@ -37,7 +36,6 @@ const UsersDataTable = ({
       { newRole, userId },
       {
         onSuccess: async () => {
-          await invalidate("users");
           showToast("User role updated successfully.", "success");
           setIsOpen(false);
           router.refresh();

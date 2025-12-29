@@ -10,8 +10,8 @@ import { Button } from "../ui/Button";
 import { useRouter } from "next/navigation";
 import { useToast } from "../../hooks/useToast";
 import { useState } from "react";
-import { signOut } from "@/Services/client/services";
 import { DEMO_ACCOUNTS } from "@/constants/constants";
+import { signOut } from "@/services/actions/actions.auth";
 
 type DemoRole = keyof typeof DEMO_ACCOUNTS;
 
@@ -39,8 +39,8 @@ const SignInForm = ({
   const { mutate: signIn, isPending } = useSignIn();
   const onSubmit = async (data: SignInFormData) => {
     signIn(data, {
-      onSuccess: () => {
-        showToast("Welcome back! You have logged in successfully.", "success");
+      onSuccess: (data) => {
+        showToast(data.message, "success");
         router.refresh();
       },
       onError: async (error: { message: string }) => {

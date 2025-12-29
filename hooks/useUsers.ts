@@ -2,45 +2,46 @@ import {
   deleteUser,
   updateAccountRequest,
   updateUserRole,
-} from "@/Services/client/services";
-import { User } from "@supabase/supabase-js";
+} from "@/services/actions/actions.user";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
-
 export const useUpdateUserRole = (): UseMutationResult<
-  IResponse["data"][],
-  IErrorResponse,
+  MutationResult,
+  Error,
   UpdateUserRolePayload
 > => {
-  return useMutation<
-    IResponse["data"][],
-    IErrorResponse,
-    UpdateUserRolePayload
-  >({
-    mutationFn: ({ newRole, userId }) => updateUserRole({ newRole, userId }),
+  return useMutation({
+    mutationFn: async ({ newRole, userId }) => {
+      const res = await updateUserRole({ newRole, userId });
+      if (!res.success) throw new Error(res.message);
+      return res as MutationResult;
+    },
   });
 };
 
 export const useDeleteUser = (): UseMutationResult<
-  User,
-  IErrorResponse,
+  MutationResult,
+  Error,
   { userId: string }
 > => {
-  return useMutation<User, IErrorResponse, { userId: string }>({
-    mutationFn: ({ userId }) => deleteUser({ userId }),
+  return useMutation({
+    mutationFn: async ({ userId }) => {
+      const res = await deleteUser({ userId });
+      if (!res.success) throw new Error(res.message);
+      return res as MutationResult;
+    },
   });
 };
 
 export const useUpdateAccountStatus = (): UseMutationResult<
-  { message: string },
-  IErrorResponse,
+  MutationResult,
+  Error,
   UpdateAccountRequestPayload
 > => {
-  return useMutation<
-    { message: string },
-    IErrorResponse,
-    UpdateAccountRequestPayload
-  >({
-    mutationFn: ({ action, userId }) =>
-      updateAccountRequest({ userId, action }),
+  return useMutation({
+    mutationFn: async ({ action, userId }) => {
+      const res = await updateAccountRequest({ userId, action });
+      if (!res.success) throw new Error(res.message);
+      return res as MutationResult;
+    },
   });
 };

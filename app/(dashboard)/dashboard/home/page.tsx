@@ -2,7 +2,7 @@ import AccountRequests from "@/components/dashboard/home/AccountRequests";
 import BorrowRequests from "@/components/dashboard/home/BorrowRequests";
 import RecentBooks from "@/components/dashboard/home/RecentBooks";
 import StatCard from "@/components/dashboard/home/StatCard";
-import { getDashboardInsights } from "@/Services/server/services";
+import { getDashboardInsights } from "@/services/queries/dashboard";
 import { createClient } from "@/utils/supabase/supabase-server";
 
 const Home = async () => {

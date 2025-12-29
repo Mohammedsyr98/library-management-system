@@ -2,7 +2,7 @@ import ResultsLoadingSpinner from "@/components/website/search/ResultsLoadingSpi
 import ResultsPagination from "@/components/website/search/ResultsPagination";
 import SearchBar from "@/components/website/search/SearchBar";
 import SearchResults from "@/components/website/search/SearchResults";
-import { getBooks } from "@/Services/server/services";
+import { getBooks } from "@/services/queries/books";
 import { getPaginationInfo } from "@/utils";
 import React, { Suspense } from "react";
 

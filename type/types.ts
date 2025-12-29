@@ -88,4 +88,10 @@ declare global {
     userId: IUser["id"];
     action: Exclude<Database["public"]["Enums"]["status"], "PENDING">;
   }
+
+  type MutationResult = {
+    message: string;
+    success: boolean;
+    error?: string;
+  };
 }

@@ -1,4 +1,4 @@
-import { getBorrowRequests } from "@/Services/server/services";
+import { getBorrowRequests } from "@/services/queries/books";
 import { getBookImageUrl } from "@/utils";
 import Image from "next/image";
 import { Calendar, CheckCircle2, AlertTriangle, Clock } from "lucide-react";
