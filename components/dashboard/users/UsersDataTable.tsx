@@ -17,9 +17,10 @@ const UsersDataTable = ({
   total,
   page,
   limit,
-}: ResourceTableProps<IUser>) => {
+}: ResourceTableProps<AllUsersWithBorrowedCountRow>) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
+  const [selectedUser, setSelectedUser] =
+    useState<AllUsersWithBorrowedCountRow | null>(null);
 
   const { mutate: updateUserRole } = useUpdateUserRole();
   const { mutate: deleteUser, isPending: pendingDelete } = useDeleteUser();
@@ -69,13 +70,13 @@ const UsersDataTable = ({
     );
   };
 
-  const columns: ColumnDef<IUser>[] = [
+  const columns: ColumnDef<AllUsersWithBorrowedCountRow>[] = [
     {
       accessorKey: "full_name",
 
       cell: ({ row }) => (
         <div className="flex items-center gap-x-2 min-w-0">
-          <ProfileInitials userFullName={row.original.full_name} />
+          <ProfileInitials userFullName={row.original.full_name ?? ""} />
           <div className="overflow-hidden">
             <p className="text-brand3 text-[14px] font-semibold truncate">
               {row.original.full_name}
@@ -111,24 +112,25 @@ const UsersDataTable = ({
           }
           value={row.original.role}
           options={ROLES}
-          onUpdate={(newRole) =>
-            handleUpdateUserRole({
-              userId: row.original.id,
-              newRole: newRole,
-            })
-          }
+          onUpdate={(newRole) => {
+            if (newRole && row.original.id)
+              handleUpdateUserRole({
+                userId: row.original.id,
+                newRole: newRole,
+              });
+          }}
         />
       ),
       header: () => "Role",
     },
     {
       id: "books_borrowed",
-      accessorFn: (row) => row.Borrowed_books,
+      accessorFn: (row) => row.borrowed_books,
       header: () => <span>Books Borrowed</span>,
     },
   ];
 
-  const Actions = ({ row }: { row: IUser }) => {
+  const Actions = ({ row }: { row: AllUsersWithBorrowedCountRow }) => {
     return (
       <button
         onClick={() => {
@@ -159,7 +161,7 @@ const UsersDataTable = ({
           selectedUser={selectedUser}
           isPending={pendingDelete}
           setSelectedUser={setSelectedUser}
-          onDelete={() => handleDeleteUser({ userId: selectedUser.id })}
+          onDelete={() => handleDeleteUser({ userId: selectedUser.id! })}
         />
       )}
     </>

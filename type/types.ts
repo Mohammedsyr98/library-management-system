@@ -67,7 +67,8 @@ declare global {
 
   type BookRequestRow =
     Database["public"]["Functions"]["search_borrow_requests"]["Returns"][number];
-
+  type AllUsersWithBorrowedCountRow =
+    Database["public"]["Views"]["users_with_borrowed_count"]["Row"];
   type BookFormData = yup.InferType<typeof BookFormSchema>;
 
   interface UpdateBorrowStatusParams {
