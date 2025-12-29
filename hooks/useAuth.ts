@@ -17,7 +17,11 @@ export const useSignIn = (): UseMutationResult<
   SignInFormData
 > => {
   return useMutation<MutationResult, IErrorResponse, SignInFormData>({
-    mutationFn: (data) => signIn(data),
+    mutationFn: async (data) => {
+      const res = await signIn(data);
+      if (!res.success) throw new Error(res.message);
+      return res as MutationResult;
+    },
   });
 };
 
