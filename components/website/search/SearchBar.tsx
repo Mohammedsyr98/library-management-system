@@ -10,7 +10,9 @@ const SearchBar = () => {
 
   const createQueryString = (name: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set(name, value);
+    if (params.get("page")) params.delete("page");
+    if (value) params.set(name, value);
+    else params.delete(name);
     return params.toString();
   };
   const handleSearchChange = useDebouncedCallback(
