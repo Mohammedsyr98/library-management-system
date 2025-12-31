@@ -47,9 +47,8 @@ export const signUp = async (data: SignUpFormData) => {
       },
     },
   });
-
+  await supabase.auth.signOut();
   if (error) {
-    await supabase.auth.signOut();
     return {
       success: false,
       message: error.message,

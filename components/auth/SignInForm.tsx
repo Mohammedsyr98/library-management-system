@@ -11,7 +11,6 @@ import { useRouter } from "next/navigation";
 import { useToast } from "../../hooks/useToast";
 import { useState } from "react";
 import { DEMO_ACCOUNTS } from "@/constants/constants";
-import { signOut } from "@/services/actions/actions.auth";
 
 type DemoRole = keyof typeof DEMO_ACCOUNTS;
 
@@ -37,15 +36,14 @@ const SignInForm = ({
     },
   });
   const { mutate: signIn, isPending } = useSignIn();
-  const onSubmit = async (data: SignInFormData) => {
+  const onSubmit = (data: SignInFormData) => {
     signIn(data, {
       onSuccess: (data) => {
+        router.push("/");
         showToast(data.message, "success");
-        router.refresh();
       },
-      onError: async (error: { message: string }) => {
+      onError: (error: { message: string }) => {
         showToast(error.message, "error");
-        await signOut();
       },
     });
   };
